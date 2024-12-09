@@ -1,0 +1,138 @@
+%******************************************************************************
+%*** Development Environment *****************************************************************
+%******************************************************************************
+
+For explanation, we suppose the following environment:
+MATLAB:R2015b
+OS:Windows 64bit
+
+We suppose that CVX (http://cvxr.com/cvx/) is used to solve convex optimization programs in "main.m."
+
+For the set-up of CVX:
+1. Download "cvx-w64.zip" for OS working with Windows 64bit. (URL: http://cvxr.com/cvx/download/)
+2. Unzip the downloaded file.
+3. Put the directory "cvx" just under the directory "MATLAB\R2015b."
+4. Run: run('C:\Program Files\MATLAB\R2015b\cvx\cvx_setup'), which is included at the top of "main.m" as a header. 
+
+
+%******************************************************************************
+%*** Input Data ***************************************************************
+%******************************************************************************
+[data_input.xlsx]: 
+
+* The list of parameters of Agg.#1--Agg.#11.
+* Sheet i corresponds to Agg.#i.
+* The following parameters are listed:
+Load, PV scenario 1,...,PV scenario 10, Fuel cost of generators, Upper and lower limits of generator outputs, 
+Coefficients of battery usage cost function,  Inverter and battery capacities with respect to each consumer
+
+## Agg.#1--Agg.#10 are supposed not to have conventional generators, so all values relevant to generators are set to zero.
+## PV scenario corresponds to the case of Low PV penetration level.
+## If "High" is selected in main.m, PV scenarios at High PV penetration level are to be calculated as scenarios that are 3.9 times larger than those at Low PV penetration level
+## Agg.#11 is supposed not to have Load, PV, and Batteries, so all values relevant to them are set to zero.
+
+
+%******************************************************************************
+%*** Output Data **************************************************************
+%******************************************************************************
+
+[data_output_PVlevel1_Batterylevel20.xlsx]:
+
+For explanation, we show the resultant outputs when we set PV penetration level as "Low" and Battery penetration level as "20%" in "main.m"
+The following data set is to be saved: 
+
+@Sheet1
+* Prosumption: Prosumption profile of Agg.#1
+* PVcurtail_Sce1,...,PVcurtail_Sce10: PV curtailment profile of Agg.#1 for each of PV scenarios 1--10 
+* CDharge_Sce1,...,CDharge_Sce10: Battery charge and discharge profile of Agg.#1 for each of PV scenarios 1--10 
+* SOC_Sce1,...,SOC_Sce10: SOC profile of of Agg.#1
+* Profit: Profit of of Agg.#1
+
+## The resultant data of only Agg.#1 are to be saved in the default setting.
+
+@Sheet2
+* PVcurtail_mean: The aggregation (Agg.#1--Agg.#10) of the mean of PV curtailment profiles 
+* CDharge_mean: The aggregation (Agg.#1--Agg.#10) of the mean of battery charge and discharge profiles 
+
+@Sheet3
+* The generation profiles of Generator#1--Generator#13 in Agg.#11
+* Price: Market clearing price profile
+* Social cost: Resultant social cost
+
+%----------------------------------------------------------
+[data_output_PVlevel2_Batterylevel0.xlsx]:
+The resultant outputs when we set PV penetration level as "High" and Battery penetration level as "0%" in "main.m."
+%----------------------------------------------------------
+[data_output_PVlevel2_Batterylevel20.xlsx]:
+The resultant outputs when we set PV penetration level as "High" and Battery penetration level as "20%" in "main.m."
+%----------------------------------------------------------
+[data_output_PVlevel2_Batterylevel50.xlsx]:
+The resultant outputs when we set PV penetration level as "High" and Battery penetration level as "50%" in "main.m."
+%----------------------------------------------------------
+
+
+[data_output_socialcost_profit.xlsx]:
+
+The resultant social cost and the profit of Agg.#1 when we vary Battery penetration level.
+
+To obtain this result: 
+1. Run the following iterative procedure:
+
+for PVlevel=1:2;
+	for rate=0:5:100;
+		 [main.m without the header]
+	 end
+end
+
+## This yields 42 files of "data_output_PVlevel**_Batterylevel**.xlsx"
+
+2. Extract data of Social cost and Profit of Agg.#1.
+
+
+%******************************************************************************
+%*** mfiles ********************************************************************
+%******************************************************************************
+[main.m] : To make Output data
+
+## Put the following mfiles at the same directory
+* set_parameter.m
+* F.m
+* Fprime.m
+* object.m
+* data_input.xlsx
+
+## Battery penetration level x[%] and PV penetration level "High" or "Low" can be selected at Lines 16--27
+
+%----------------------------------------------------------
+[set_parameter.m] : To read the input data set as a structure object. 
+
+## Used in "main.m"
+## An error is to be returned when Battery penetration level and/or PV penetration level is not selected
+
+%----------------------------------------------------------
+[F.m] : Prosumption cost function defined in the paper.
+
+## This corresponds to Eq.(15) in the paper.
+
+%----------------------------------------------------------
+[Fprime.m] : Sub-function included in Prosumption cost function
+
+## This corresponds to Eq.(14) in the paper.
+
+%----------------------------------------------------------
+[object.m] : Sum of Generation cost function and battery cost function  
+
+## This corresponds to G(g)+D(\delta) in Eq.(15).
+
+%----------------------------------------------------------
+[make_figure.m] : To make Figures shown in the paper.
+
+
+
+
+
+
+
+
+
+
