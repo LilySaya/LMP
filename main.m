@@ -56,22 +56,12 @@ A = [1, -1, 0, 0, 0;
 X = H*A
 B_susceptance = [H(1,1)+H(6,6), -H(1,1), 0, -H(6,6), 0;
                  -H(1,1), H(1,1)+H(2,2), -H(2,2), 0, 0;
-<<<<<<< Updated upstream
-                 0, -H(2,2), H(2,2)+H(3,3)+H(4,4), -H(3,3), -H(4,4); 
-                 0, 0, -H(3,3), H(3,3), 0;
-                 0, 0, -H(4,4), 0, H(4,4)]
-B_susceptance_prime = B_susceptance(1:4,1:4)
-temp = [inv(B_susceptance_prime), zeros(4,1);zeros(1,4), 0]
-T = X*temp
-% T = X*inv(B_susceptance)
-=======
                  0, -H(2,2), H(2,2)+H(3,3)+H(4,4), -H(3,3), -H(4,4);
                  -H(6,6), 0, -H(3,3), H(3,3)+H(5,5)+H(6,6), -H(5,5);
                  0, 0, -H(4,4), -H(5,5), +H(4,4)+H(5,5)]
 B_susceptance_prime = B_susceptance(1:4,1:4)
 
 T = X*[inv(B_susceptance_prime), zeros(4,1);zeros(1,4), 0]
->>>>>>> Stashed changes
 
 
 [M,N] = size(T);
@@ -161,35 +151,12 @@ Bin = [Fmax;Fmax];
 %*** Convex Optimization using CVX ****************************************
 cvx_begin
 cvx_precision default
-<<<<<<< Updated upstream
-variable w(5*n,1)% Decition variable, namely, prosumption profiles for all Agg.
-=======
+
 variable w(N*n,1)% Decition variable, namely, prosumption profiles for all Agg.
->>>>>>> Stashed changes
 dual variable y
 dual variable u
-% ---------------------------------------
-%minimize(sprintf(SS))
-<<<<<<< Updated upstream
-% minimize(F(w(0*n+1:1*n,1)+w(1*n+1:2*n,1),1)+...
-%          F(w(2*n+1:3*n,1)+w(3*n+1:4*n,1)+w(4*n+1:5*n,1),2)+...
-%          F(w(5*n+1:6*n,1)+w(6*n+1:7*n,1)+w(7*n+1:8*n,1)+w(8*n+1:9*n,1)+w(9*n+1:10*n,1),3)+...
-%          F(w(10*n+1:11*n,1)+w(11*n+1:12*n,1),4)+...
-%          F(w(12*n+1:13*n,1)+w(13*n+1:14*n,1),5))
-minimize(F(w(0*n+1:1*n,1),1)+...
-         F(w(1*n+1:2*n,1),2)+...
-         F(w(2*n+1:3*n,1),3)+...
-         F(w(3*n+1:4*n,1),4)+...
-         F(w(4*n+1:5*n,1),5))
-% ---------------------------------------
-subject to
-% y:[Aeq1;Aeq2;Aeq3;Aeq4;Aeq5;Aeq6;Aeq7]*w == [Beq1;Beq2;Beq3;Beq4;Beq5;Beq6;Beq7];
-y:Aeq*w == Beq;
 
-Ain*w <= Bin;
-=======
 %{
-su
 minimize(F(  w(0*n+1:1*n,1)+w(1*n+1:2*n,1)  ,1)+...
          %%% (1:24) + (25:48)
          F(  w(2*n+1:3*n,1)+w(3*n+1:4*n,1)+w(4*n+1:5*n,1)   ,2)+...
@@ -213,7 +180,6 @@ y:Aeq*w == Beq;
 %y is system price for 24 time slots
 u:Ain*w <= Bin;
 %u is composed as [(u_hat;u_check)*24 time slots] (288x1)
->>>>>>> Stashed changes
 cvx_end
 % -------------------------------------------
 %**************************************************************************
