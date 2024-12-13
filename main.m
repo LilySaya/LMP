@@ -4,7 +4,7 @@
 clear;
 close all;
 clc
-run('/Users/byeonghwalee/Documents/MATLAB/cvx/cvx_setup')%
+%run('/Users/sayaka/Documents/MATLAB/cvx/cvx_setup')%
 % run('C:\Program Files\MATLAB\R2022a\cvx\cvx_setup')%
 %run('C:\Program Files\MATLAB\R2015b\cvx\cvx_setup')%
 %run('C:\Program Files\MATLAB\R2015b\cvx-w64\cvx\cvx_setup')%DesktopPC
@@ -43,15 +43,20 @@ end
 set_parameter% read input_data using mfile named "set_parameter.m"
 n=length(Agg(1).load);% Calculation of size for load
 
-H = diag(TransmissionLine.line_reactance)
-H = inv(H)
+H_reactance = diag(TransmissionLine.line_reactance)
+H_reactance = diag([0.00000001,0.00000001,0.00000001,0.00000001,0.00000001,0.00000001])
+H = inv(H_reactance)
+
 A = [1, -1, 0, 0, 0;
      0, 1, -1, 0, 0;
      0, 0, 1, -1, 0;
-     0, 0, 1, 0, -1]
+     0, 0, 1, 0, -1;
+     0, 0, 0, -1, 1;
+     -1, 0, 0, 1, 0]
 X = H*A
-B_susceptance = [H(1,1), -H(1,1), 0, 0, 0;
+B_susceptance = [H(1,1)+H(6,6), -H(1,1), 0, -H(6,6), 0;
                  -H(1,1), H(1,1)+H(2,2), -H(2,2), 0, 0;
+<<<<<<< Updated upstream
                  0, -H(2,2), H(2,2)+H(3,3)+H(4,4), -H(3,3), -H(4,4); 
                  0, 0, -H(3,3), H(3,3), 0;
                  0, 0, -H(4,4), 0, H(4,4)]
@@ -59,7 +64,21 @@ B_susceptance_prime = B_susceptance(1:4,1:4)
 temp = [inv(B_susceptance_prime), zeros(4,1);zeros(1,4), 0]
 T = X*temp
 % T = X*inv(B_susceptance)
+=======
+                 0, -H(2,2), H(2,2)+H(3,3)+H(4,4), -H(3,3), -H(4,4);
+                 -H(6,6), 0, -H(3,3), H(3,3)+H(5,5)+H(6,6), -H(5,5);
+                 0, 0, -H(4,4), -H(5,5), +H(4,4)+H(5,5)]
+B_susceptance_prime = B_susceptance(1:4,1:4)
 
+T = X*[inv(B_susceptance_prime), zeros(4,1);zeros(1,4), 0]
+>>>>>>> Stashed changes
+
+
+[M,N] = size(T);
+%M: number of brances
+%N: number of buses
+n = 24;
+%n: number of timeslots
 %**************************************************************************
 %*** CVX ******************************************************************
 %**************************************************************************
@@ -88,8 +107,8 @@ T = X*temp
 % Beq5=zeros(n,1);
 % Beq6=zeros(n,1);
 % Beq7=zeros(n,1);
-Aeq = kron(eye(24),ones(1,5));
-Beq = zeros(24,1);
+Aeq = kron(eye(n),ones(1,N));
+Beq = zeros(n,1);
 %--- 
 
 %--- 送電容量[GW]
@@ -102,20 +121,20 @@ B4=yo(3)/mean(yo)*6.7/8;
 B5=yo(4)/mean(yo)*6.7/8;
 B6=yo(5)/mean(yo)*6.7/8;
 B7=yo(6)/mean(yo)*6.7/8;
-B = [B1, B3, B4, B7];
+B = [B1, B3, B4, B7, B7, B7];
+B = [5000, 2000, 3000, 2000, 40000, 8000];
 
-tmp1 = [];
-tmp2 = [];
-[temp_m,temp_n] = size(B);
-base_matrix = diag(ones(1, 24));
-for i = 1:size(T, 1)
-    tmp1 = [tmp1; T(i, :); -T(i, :)];
-end
-Ain = kron(base_matrix,tmp1);
-for i = 1:length(B)
-    tmp2 = [tmp2; B(i); -B(i)];
-end
-Bin = repmat(tmp2',1,24)';
+base_matrix = diag(ones(1,n));
+tmp1 = [T;-T];
+T_max = kron(base_matrix,T);
+T_min = kron(base_matrix,-T);
+Ain = [T_max;T_min];
+
+tmp2 = [B;-B];
+Fmax = reshape(repmat(B',1,n),[],1);
+Fmin = reshape(repmat(-B',1,n),[],1);
+Bin = [Fmax;Fmax];
+%if T is minus, Fmax is okay
 
 % Ain=kron(eye(14),[eye(n);-eye(n)]);
 % Bin=[B1*ones(2*n,1);
@@ -142,10 +161,16 @@ Bin = repmat(tmp2',1,24)';
 %*** Convex Optimization using CVX ****************************************
 cvx_begin
 cvx_precision default
+<<<<<<< Updated upstream
 variable w(5*n,1)% Decition variable, namely, prosumption profiles for all Agg.
+=======
+variable w(N*n,1)% Decition variable, namely, prosumption profiles for all Agg.
+>>>>>>> Stashed changes
 dual variable y
+dual variable u
 % ---------------------------------------
 %minimize(sprintf(SS))
+<<<<<<< Updated upstream
 % minimize(F(w(0*n+1:1*n,1)+w(1*n+1:2*n,1),1)+...
 %          F(w(2*n+1:3*n,1)+w(3*n+1:4*n,1)+w(4*n+1:5*n,1),2)+...
 %          F(w(5*n+1:6*n,1)+w(6*n+1:7*n,1)+w(7*n+1:8*n,1)+w(8*n+1:9*n,1)+w(9*n+1:10*n,1),3)+...
@@ -162,12 +187,40 @@ subject to
 y:Aeq*w == Beq;
 
 Ain*w <= Bin;
+=======
+%{
+su
+minimize(F(  w(0*n+1:1*n,1)+w(1*n+1:2*n,1)  ,1)+...
+         %%% (1:24) + (25:48)
+         F(  w(2*n+1:3*n,1)+w(3*n+1:4*n,1)+w(4*n+1:5*n,1)   ,2)+...
+         %%% (49:72) + (73:96) + (97:120)
+         F(w(5*n+1:6*n,1)+w(6*n+1:7*n,1)+w(7*n+1:8*n,1)+w(8*n+1:9*n,1)+w(9*n+1:10*n,1),3)+...
+         %%% Agg3 has 5  buses connected
+         F(w(10*n+1:11*n,1)+w(11*n+1:12*n,1),4)+...
+         %%% Agg4 has 2 buses connected
+         F(w(12*n+1:13*n,1)+w(13*n+1:14*n,1),5))
+         %%% Agg5 has 2 buses connected
+%}
+minimize(F(w(0*n+1:1*n,1),1) +...
+         F(w(1*n+1:2*n,1),2) +...
+         F(w(2*n+1:3*n,1),3) +...
+         F(w(3*n+1:4*n,1),4) +...
+         F(w(4*n+1:5*n,1),5) )
+% ---------------------------------------
+subject to
+%y:[Aeq1;Aeq2;Aeq3;Aeq4;Aeq5;Aeq6;Aeq7]*w == [Beq1;Beq2;Beq3;Beq4;Beq5;Beq6;Beq7];
+y:Aeq*w == Beq;
+%y is system price for 24 time slots
+u:Ain*w <= Bin;
+%u is composed as [(u_hat;u_check)*24 time slots] (288x1)
+>>>>>>> Stashed changes
 cvx_end
 % -------------------------------------------
 %**************************************************************************
 optx=w;% The optimal prosumption profiles for all Agg.
 socialcost_i=cvx_optval%Social cost
 
+%{
 % for aggNo=1:11;
 %     x_giv{aggNo}=optx((aggNo-1)*n+1:aggNo*n,1);% Prosumption profile for Agg.#aggNo
 % end
@@ -191,21 +244,46 @@ x_agg4_nodal5=optx(11*n+1:12*n,1);
 x_agg5_nodal6=optx(12*n+1:13*n,1);
 x_agg5_nodal7=optx(13*n+1:14*n,1);
 %---
+%}
+x_agg1_nodal1 = optx(0*n+1:1*n,1);
+x_agg2_nodal2 = optx(1*n+1:2*n,1);
+x_agg3_nodal3=optx(2*n+1:3*n,1);
+x_agg4_nodal4=optx(3*n+1:4*n,1);
+x_agg5_nodal5=optx(4*n+1:5*n,1);
 %--- ここで総創電力をおいちゃう．
-x_giv{1}=x_agg1_nodal1+x_agg1_nodal2;
-x_giv{2}=x_agg2_nodal1+x_agg2_nodal2+x_agg2_nodal3;
-x_giv{3}=x_agg3_nodal3+x_agg3_nodal4+x_agg3_nodal5+x_agg3_nodal6+x_agg3_nodal7;
-x_giv{4}=x_agg4_nodal4+x_agg4_nodal5;
-x_giv{5}=x_agg5_nodal6+x_agg5_nodal7;
+x_giv{1}=x_agg1_nodal1;
+x_giv{2}=x_agg2_nodal2;
+x_giv{3}=x_agg3_nodal3;
+x_giv{4}=x_agg4_nodal4;
+x_giv{5}=x_agg5_nodal5;
 
+%{
 lam1=y(0*n+1:1*n,1);% Clearing price
 lam2=y(1*n+1:2*n,1);
 lam3=y(2*n+1:3*n,1);
 lam4=y(3*n+1:4*n,1);
 lam5=y(4*n+1:5*n,1);
-lam6=y(5*n+1:6*n,1);
-lam7=y(6*n+1:7*n,1);
+%}
+lam=y(0*n+1:1*n,1); %System wide price
+u_hat = u(0*n+1:1*n*M,1); %(144x1) 6brachesx24timeslots
+congestion_price_max = (u_hat'*T_max)'; %(Bus1to5)x24timeslots (120x1)
 
+%Split for each busx24timeslots
+reshaped_cprice_max = reshape(congestion_price_max, 24, 5);
+cprice_max1 = reshaped_cprice_max(:, 1); % First column (bus 1 values)
+cprice_max2 = reshaped_cprice_max(:, 2); % Second column (bus 2 values)
+cprice_max3 = reshaped_cprice_max(:, 3); % Third column (bus 3 values)
+cprice_max4 = reshaped_cprice_max(:, 4); % Fourth column (bus 4 values)
+cprice_max5 = reshaped_cprice_max(:, 5); % Fifth column (bus 5 values)
+
+u_check = u(1*n*M+1:2*n*M,1);
+congestion_price_min = (u_check'*T_max)';
+reshaped_cprice_min = reshape(congestion_price_min, 24, 5);
+cprice_min1 = reshaped_cprice_min(:, 1); % First column (bus 1 values)
+cprice_min2 = reshaped_cprice_min(:, 2); % Second column (bus 2 values)
+cprice_min3 = reshaped_cprice_min(:, 3); % Third column (bus 3 values)
+cprice_min4 = reshaped_cprice_min(:, 4); % Fourth column (bus 4 values)
+cprice_min5 = reshaped_cprice_min(:, 5); % Fifth column (bus 5 values)
 
 % figure(200)
 % plot(lam1,'b-');hold on;
@@ -271,21 +349,36 @@ lam7=y(6*n+1:7*n,1);
 %**************************************************************************
 %*** Profit for Agg.#1 ****************************************************
 %**************************************************************************
+%{
 cost1=F(x_agg1_nodal1+x_agg1_nodal2,1);%Cost for Agg.#1
 profit1=-cost1...
         +lam1'*x_agg1_nodal1...
         +lam2'*x_agg1_nodal2;%Profit for Agg.#1
+%}
+cost1=F(x_agg1_nodal1,1);%Cost for Agg.#1
+profit1=-cost1...
+        +lam'*x_agg1_nodal1-...
+        cprice_max1+...
+        cprice_min1;%Profit for Agg.#1
 %**************************************************************************
 %*** Profit for Agg.#2 ****************************************************
 %**************************************************************************
+%{
 cost2=F(x_agg2_nodal1+x_agg2_nodal2+x_agg2_nodal3,2);%Cost for Agg.#2
 profit2=-cost2...
         +lam1'*x_agg2_nodal1...
         +lam2'*x_agg2_nodal2...
         +lam3'*x_agg2_nodal3;%Profit for Agg.#2
+%}
+cost2=F(x_agg2_nodal2,2);%Cost for Agg.#2
+profit2=-cost2...
+        +lam'*x_agg2_nodal2-...
+        cprice_max2+...
+        cprice_min2;%Profit for Agg.#2
 %**************************************************************************
 %*** Profit for Agg.#3 ****************************************************
 %**************************************************************************
+%{
 cost3=F(x_agg3_nodal3+x_agg3_nodal4+x_agg3_nodal5+x_agg3_nodal6+x_agg3_nodal7,3);%Cost for Agg.#3
 profit3=-cost3...
         +lam3'*x_agg3_nodal3...
@@ -293,20 +386,40 @@ profit3=-cost3...
         +lam5'*x_agg3_nodal5...
         +lam6'*x_agg3_nodal6...
         +lam7'*x_agg3_nodal7;%Profit for Agg.#3
+%}
+cost3=F(x_agg3_nodal3,3);%Cost for Agg.#3
+profit3=-cost3...
+        +lam'*x_agg3_nodal3-...
+        cprice_max3+...
+        cprice_min3;%Profit for Agg.#3
 %**************************************************************************
 %*** Profit for Agg.#4 ****************************************************
 %**************************************************************************
+%{
 cost4=F(x_agg4_nodal4+x_agg4_nodal5,4);%Cost for Agg.#4
 profit4=-cost4...
         +lam4'*x_agg4_nodal4...
         +lam5'*x_agg4_nodal5;%Profit for Agg.#4
+%}
+cost4=F(x_agg4_nodal4,4);%Cost for Agg.#4
+profit4=-cost4...
+        +lam'*x_agg4_nodal4-...
+        cprice_max4+...
+        cprice_min4;%Profit for Agg.#4
 %**************************************************************************
 %*** Profit for Agg.#5 ****************************************************
 %**************************************************************************
+%{
 cost5=F(x_agg5_nodal6+x_agg5_nodal7,5);%Cost for Agg.#5
 profit5=-cost5...
         +lam6'*x_agg5_nodal6...
         +lam7'*x_agg5_nodal7;%Profit for Agg.#5
+%}
+cost5=F(x_agg5_nodal5,5);%Cost for Agg.#5
+profit5=-cost5...
+        +lam'*x_agg5_nodal5-...
+        cprice_max5+...
+        cprice_min5;%Profit for Agg.#5
 %**************************************************************************
 %*** Calculation of Scenarios for Agg.#1 to #10 ***************************
 %**************************************************************************
