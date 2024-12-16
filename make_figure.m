@@ -554,7 +554,7 @@ ylabel('Profit[M JPY]','Fontname','Times','FontSize',15)
 
 
 
-
+xxxxx
 
 
 
@@ -586,6 +586,7 @@ elseif PVlevel==3;
 else
     error('incorect PVlevel')
 end
+
 %--------------------------------------------------------------------------
 set_parameter
 load(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel),...
@@ -1095,3 +1096,4 @@ ylabel('Profit[M JPY]','Fontname','Times','FontSize',15)
 
 
 
+3
