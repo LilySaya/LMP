@@ -21,11 +21,11 @@ tic
 % for PVlevel=1:2;
 % for rate=10:5:100;
 %for batterylevel=[0:5:100];
-for batterylevel=50
+for batterylevel=5
 %--- Important parameter
 %--- You need to decide battry penetration level & to select PV level. ----
 %batterylevel=0;%[%] battery penetration level,which must be selected from 0 to 100.
-PVlevel=3;% It must be selected 1 or 2, 1:=PV_Low, 2:=PV_High
+PVlevel=1;% It must be selected 1 or 2, 1:=PV_Low, 2:=PV_High
 
 %--- Decision coefficient of PV level -------------------------------------
 if PVlevel==1;

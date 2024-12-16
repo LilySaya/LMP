@@ -34,7 +34,6 @@ for aggNo=1:5;% we focus on Agg.# aggNo
         Agg(aggNo).g_min{kk}=temp_min_out(kk,1);%Min.output of kk th thermal plant
     end
 end
-
 TransmissionLine = struct();
 for lineNo = 1:4
     %--- Read data_input_line.xlsx

@@ -1,5 +1,4 @@
 function [optf,optz]=Fprime(xa,pv,aggNo)
-
 global Agg
 n=length(xa);% Calculation of size for prosumption profile
 %Decition variable z=[q;delta_in;delta_out;g01;g02;g03;g04;g05;g06;g07;g08;g09;g10;g11;g12;g13]
@@ -19,7 +18,6 @@ n=length(xa);% Calculation of size for prosumption profile
 %g11 stands for Generating power of thermal power plant #11(Coal:B)
 %g12 stands for Generating power of thermal power plant #12(Coal:C)
 %g13 stands for Generating power of thermal power plant #13(Coal:D)
-
 %**************************************************************************
 %*** Read parameter from structure Agg ************************************
 %**************************************************************************
@@ -45,31 +43,26 @@ agg_g02_max=Agg(aggNo).g_max{2};%Max.output of thermal plant #2
 agg_g02_min=Agg(aggNo).g_min{2};%Min.output of thermal plant #2
 agg_g03_max=Agg(aggNo).g_max{3};%Max.output of thermal plant #3
 agg_g03_min=Agg(aggNo).g_min{3};%Min.output of thermal plant #3
-
 agg_g04_max=Agg(aggNo).g_max{4};%Max.output of thermal plant #4
 agg_g04_min=Agg(aggNo).g_min{4};%Min.output of thermal plant #4
 agg_g05_max=Agg(aggNo).g_max{5};%Max.output of thermal plant #5
 agg_g05_min=Agg(aggNo).g_min{5};%Min.output of thermal plant #5
 agg_g06_max=Agg(aggNo).g_max{6};%Max.output of thermal plant #6
 agg_g06_min=Agg(aggNo).g_min{6};%Min.output of thermal plant #6
-
 agg_g07_max=Agg(aggNo).g_max{7};%Max.output of thermal plant #7
 agg_g07_min=Agg(aggNo).g_min{7};%Min.output of thermal plant #7
 agg_g08_max=Agg(aggNo).g_max{8};%Max.output of thermal plant #8
 agg_g08_min=Agg(aggNo).g_min{8};%Min.output of thermal plant #8
 agg_g09_max=Agg(aggNo).g_max{9};%Max.output of thermal plant #9
 agg_g09_min=Agg(aggNo).g_min{9};%Min.output of thermal plant #9
-
 agg_g10_max=Agg(aggNo).g_max{10};%Max.output of thermal plant #10
 agg_g10_min=Agg(aggNo).g_min{10};%Min.output of thermal plant #10
 agg_g11_max=Agg(aggNo).g_max{11};%Max.output of thermal plant #11
 agg_g11_min=Agg(aggNo).g_min{11};%Min.output of thermal plant #11
 agg_g12_max=Agg(aggNo).g_max{12};%Max.output of thermal plant #12
 agg_g12_min=Agg(aggNo).g_min{12};%Min.output of thermal plant #12
-
 agg_g13_max=Agg(aggNo).g_max{13};%Max.output of thermal plant #13
 agg_g13_min=Agg(aggNo).g_min{13};%Min.output of thermal plant #13
-
 %**************************************************************************
 %*** CVX ******************************************************************
 %**************************************************************************
