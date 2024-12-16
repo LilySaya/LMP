@@ -77,7 +77,7 @@ load(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel
 figure
 Y=[lam];
 bar3(Y);
-title(sprintf('LMP at Reference Bus, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
+title(sprintf('System-wide Price, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
 %legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
 %bar(1:n,lam,'b','Linewidth',2);%
 ylabel('Time [h]','Fontname','Times','FontSize',15);
