@@ -65,7 +65,6 @@ load(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel
 
 %--- ‘S‘Ì‚ðŒ©‚é‚½‚ß‚É
 %figure(200);hold on;grid on;box on;
-figure
 % bar(1:24,lam1,'b-','Linewidth',2,'FaceAlpha',.4);
 % bar(1:24,lam2,'r-','Linewidth',2,'FaceAlpha',.4);
 % bar(1:24,lam3,'g-','Linewidth',2,'FaceAlpha',.4);
@@ -75,20 +74,21 @@ figure
 % bar(1:24,lam7,'k--','Linewidth',2,'FaceAlpha',.4)
 %stairs(0.5:24.5,[lam1;lam1(24)],'r-','Linewidth',5);
 
-Y=[lam];
-bar3(Y);
-title(sprintf('LMP at Reference Bus, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
-%legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
-%bar(1:n,lam,'b','Linewidth',2);%
-ylabel('Time [h]','Fontname','Times','FontSize',15);
-zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
-%axis([0 25 0 12])
-zlim([0 12])
+% % figure
+% % Y=[lam];
+% % bar3(Y);
+% % title(sprintf('LMP at Reference Bus, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
+% % %legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
+% % %bar(1:n,lam,'b','Linewidth',2);%
+% % ylabel('Time [h]','Fontname','Times','FontSize',15);
+% % zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
+% % %axis([0 25 0 12])
+% % zlim([0 12])
 
 figure
 u_hat_matrix = reshape(u_hat, 6, 24)
 bar3(u_hat_matrix');
-title(sprintf('u_hat (Upper Limit), PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
+title(sprintf('$\\hat{u}$ (Upper Limit), PVlevel:%d Batterylevel:%d', PVlevel, batterylevel), 'Interpreter', 'latex');
 %legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
 %bar(1:n,lam,'b','Linewidth',2);%
 ylabel('Time [h]','Fontname','Times','FontSize',15);
@@ -99,7 +99,7 @@ zlim([0 12])
 figure
 u_check_matrix = reshape(u_check, 6, 24)
 bar3(u_check_matrix');
-title(sprintf('u_check (Lower Limit), PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
+title(sprintf('$\\check{u}$ (Lower Limit), PVlevel:%d Batterylevel:%d', PVlevel, batterylevel), 'Interpreter', 'latex');
 %legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
 %bar(1:n,lam,'b','Linewidth',2);%
 ylabel('Time [h]','Fontname','Times','FontSize',15);
