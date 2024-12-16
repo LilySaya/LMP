@@ -74,16 +74,16 @@ load(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel
 % bar(1:24,lam7,'k--','Linewidth',2,'FaceAlpha',.4)
 %stairs(0.5:24.5,[lam1;lam1(24)],'r-','Linewidth',5);
 
-% % figure
-% % Y=[lam];
-% % bar3(Y);
-% % title(sprintf('LMP at Reference Bus, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
-% % %legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
-% % %bar(1:n,lam,'b','Linewidth',2);%
-% % ylabel('Time [h]','Fontname','Times','FontSize',15);
-% % zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
-% % %axis([0 25 0 12])
-% % zlim([0 12])
+figure
+Y=[lam];
+bar3(Y);
+title(sprintf('LMP at Reference Bus, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
+%legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
+%bar(1:n,lam,'b','Linewidth',2);%
+ylabel('Time [h]','Fontname','Times','FontSize',15);
+zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
+%axis([0 25 0 12])
+zlim([0 12])
 
 figure
 u_hat_matrix = reshape(u_hat, 6, 24)
