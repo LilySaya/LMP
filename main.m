@@ -5,6 +5,7 @@ clear;
 close all;
 clc
 %run('/Users/judy/Documents/MATLAB/cvx/cvx_setup')%
+run('/Users/ByeonghwaLee/Documents/MATLAB/cvx/cvx_setup')%
 %run('C:\Program Files\MATLAB\R2022a\cvx\cvx_setup')%
 %run('C:\Program Files\MATLAB\R2015b\cvx\cvx_setup')%
 %run('C:\Program Files\MATLAB\R2015b\cvx-w64\cvx\cvx_setup')%DesktopPC
@@ -146,7 +147,8 @@ Fmin = reshape(repmat(-B',1,n),[],1);
 % Bin = [Fmax;Fmax];
 relaxation_term = mean(Fmax);
 
-Bin = [Fmax+relaxation_term;-Fmin+relaxation_term];
+% Bin = [Fmax+relaxation_term;-Fmin+relaxation_term];
+Bin = [Fmax;-Fmin];
 
 %if T is minus, Fmax is okay
 
