@@ -38,7 +38,7 @@ end
 TransmissionLine = struct();
 for lineNo = 1:4
     %--- Read data_input_line.xlsx
-    temp_lineX = xlsread('data_input_line','C3:C6');%Reactance of each Transmission line
+    temp_lineX = xlsread('data_input_line','C3:C8');%Reactance of each Transmission line
     %---
     TransmissionLine.line_reactance = temp_lineX;
 end
