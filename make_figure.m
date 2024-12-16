@@ -14,7 +14,7 @@ set(0,'defaultTextFontName','century');
 %*** Plot Fig.1(a1),(a2),(a3) *********************************************
 %**************************************************************************
 %--- Read data_output -----------------------------------------------------
-batterylevel=50;%[%] battery penetration level
+batterylevel=0;%[%] battery penetration level
 PVlevel=3;%  1:=PV_Low
 %--- Decision coefficient of PV level -------------------------------------
 if PVlevel==1;
@@ -28,33 +28,14 @@ else
 end
 %--------------------------------------------------------------------------
 set_parameter
-% load(sprintf('data_output_PVlevel%d_Batterylevel%d.mat',PVlevel,batterylevel),...
-%     'x_agg1_nodal1','x_agg1_nodal2',...
-%     'x_agg2_nodal1','x_agg2_nodal2','x_agg2_nodal3',...
-%     'x_agg3_nodal3','x_agg3_nodal4','x_agg3_nodal5','x_agg3_nodal6','x_agg3_nodal7',...
-%     'x_agg4_nodal4','x_agg4_nodal5',...
-%     'x_agg5_nodal6','x_agg5_nodal7',...
-%     'x_giv',... %セル
-%     'lam1','lam2','lam3','lam4','lam5','lam6','lam7',...
-%     'cost1','cost2','cost3','cost4','cost5',...
-%     'profit1','profit2','profit3','profit4','profit5',...
-%     'q','delta_in','delta_out','delta','yaa',...%セル
-%     'g01','g02','g03','g04','g05','g06','g07','g08','g09','g10','g11','g12','g13',...%セル
-%     'q_m','delta_m',...%セル
-%     'g01_m','g02_m','g03_m','g04_m','g05_m','g06_m','g07_m','g08_m','g09_m','g10_m','g11_m','g12_m','g13_m',...%セル
-    % 'socialcost_i','B1','B2','B3','B4','B5','B6','B7');
-
 load(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel),...
-    'x_agg1_nodal1','x_agg2_nodal2',...
-    'x_agg3_nodal3','x_agg4_nodal4','x_agg5_nodal5',...
+    'x_agg1_nodal1','x_agg1_nodal2',...
+    'x_agg2_nodal1','x_agg2_nodal2','x_agg2_nodal3',...
+    'x_agg3_nodal3','x_agg3_nodal4','x_agg3_nodal5','x_agg3_nodal6','x_agg3_nodal7',...
+    'x_agg4_nodal4','x_agg4_nodal5',...
+    'x_agg5_nodal6','x_agg5_nodal7',...
     'x_giv',... %セル
-    'lam',...
-    'u_hat',...
-    'reshaped_cprice_max',...
-    'cprice_max1','cprice_max2','cprice_max3','cprice_max4','cprice_max5',...
-    'u_check',...
-    'reshaped_cprice_min',...
-    'cprice_min1','cprice_min2','cprice_min3','cprice_min4','cprice_min5',...
+    'lam1','lam2','lam3','lam4','lam5','lam6','lam7',...
     'cost1','cost2','cost3','cost4','cost5',...
     'profit1','profit2','profit3','profit4','profit5',...
     'q','delta_in','delta_out','delta','yaa',...%セル
@@ -75,8 +56,7 @@ figure
 % bar(1:24,lam6,'k-','Linewidth',2,'FaceAlpha',.4);
 % bar(1:24,lam7,'k--','Linewidth',2,'FaceAlpha',.4)
 %stairs(0.5:24.5,[lam1;lam1(24)],'r-','Linewidth',5);
-
-Y=[lam];
+Y=[lam1 lam2 lam3 lam4 lam5 lam6 lam7];
 bar3(Y);
 title(sprintf('Price, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
 %legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
@@ -88,17 +68,18 @@ zlim([0 12])
 
 
 figure(100)
-plot(x_agg1_nodal1,'Linewidth',3,'Color',[0.87,0.49,0]);hold on;
-plot(x_agg2_nodal2,'Linewidth',3,'Color',[1,0.84,0]);
-plot(x_agg3_nodal3,'Linewidth',3,'Color',[0,0.45,0.74]);
-plot(x_agg4_nodal4,'Linewidth',3,'Color',[0.35,0.2,0.33]);
-plot(x_agg5_nodal5,'Linewidth',3,'Color',[0,0.5,0]);
+plot(x_agg1_nodal1+x_agg1_nodal2,'Linewidth',3,'Color',[0.87,0.49,0]);hold on;
+plot(x_agg2_nodal1+x_agg2_nodal2+x_agg2_nodal3,'Linewidth',3,'Color',[1,0.84,0]);
+plot(x_agg3_nodal3+x_agg3_nodal4+x_agg3_nodal5+x_agg3_nodal6+x_agg3_nodal7,...
+    'Linewidth',3,'Color',[0,0.45,0.74]);
+plot(x_agg4_nodal4+x_agg4_nodal5,'Linewidth',3,'Color',[0.35,0.2,0.33]);
+plot(x_agg5_nodal6+x_agg5_nodal7,'Linewidth',3,'Color',[0,0.5,0]);
 legend('Agg1','Agg2','Agg3','Agg4','Agg5')
 ylabel('[GW]')
 title(sprintf('total prosumption, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
 figure
 plot(x_agg1_nodal1,'b-','Linewidth',2);hold on
-% plot(x_agg1_nodal2,'r-','Linewidth',2)
+plot(x_agg1_nodal2,'r-','Linewidth',2)
 plot([1:24],B1*ones(1,24),'b--')
 plot([1:24],-B1*ones(1,24),'b--')
 plot([1:24],B2*ones(1,24),'r--')
@@ -108,9 +89,9 @@ ylabel('[GW]')
 legend('nodal1','nodal2')
 
 figure
-% plot(x_agg2_nodal1,'b-','Linewidth',2);hold on
-plot(x_agg2_nodal2,'r-','Linewidth',2);hold on
-% plot(x_agg2_nodal3,'g-','Linewidth',2)
+plot(x_agg2_nodal1,'b-','Linewidth',2);hold on
+plot(x_agg2_nodal2,'r-','Linewidth',2)
+plot(x_agg2_nodal3,'g-','Linewidth',2)
 plot([1:24],B1*ones(1,24),'b--')
 plot([1:24],-B1*ones(1,24),'b--')
 plot([1:24],B2*ones(1,24),'r--')
@@ -119,15 +100,14 @@ plot([1:24],B3*ones(1,24),'g--')
 plot([1:24],-B3*ones(1,24),'g--')
 title(sprintf('Each prosumption for agg2, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
 ylabel('[GW]')
-% legend('nodal1','nodal2','nodal3')
-legend('nodal2')
+legend('nodal1','nodal2','nodal3')
 
 figure
 plot(x_agg3_nodal3,'g-','Linewidth',2);hold on
-% plot(x_agg3_nodal4,'m-','Linewidth',2)
-% plot(x_agg3_nodal5,'c-','Linewidth',2)
-% plot(x_agg3_nodal6,'k-','Linewidth',2)
-% plot(x_agg3_nodal7,'k--','Linewidth',2)
+plot(x_agg3_nodal4,'m-','Linewidth',2)
+plot(x_agg3_nodal5,'c-','Linewidth',2)
+plot(x_agg3_nodal6,'k-','Linewidth',2)
+plot(x_agg3_nodal7,'k--','Linewidth',2)
 plot([1:24],B3*ones(1,24),'g--')
 plot([1:24],-B3*ones(1,24),'g--')
 plot([1:24],B4*ones(1,24),'m--')
@@ -140,34 +120,30 @@ plot([1:24],B7*ones(1,24),'k:')
 plot([1:24],-B7*ones(1,24),'k:')
 title(sprintf('Each prosumption for agg3, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
 ylabel('[GW]')
-% legend('nodal3','nodal4','nodal5','nodal6','nodal7')
-legend('nodal3')
+legend('nodal3','nodal4','nodal5','nodal6','nodal7')
 
 figure
 plot(x_agg4_nodal4,'m-','Linewidth',2);hold on;
-% plot(x_agg4_nodal5,'c-','Linewidth',2)
+plot(x_agg4_nodal5,'c-','Linewidth',2)
 plot([1:24],B4*ones(1,24),'m--')
 plot([1:24],-B4*ones(1,24),'m--')
 plot([1:24],B5*ones(1,24),'c--')
 plot([1:24],-B5*ones(1,24),'c--')
+
 title(sprintf('Each prosumption for agg4, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
 ylabel('[GW]')
-% legend('nodal4','nodal5')
-legend('nodal4')
+legend('nodal4','nodal5')
 
 figure
-plot(x_agg5_nodal5,'k-','Linewidth',2);hold on;
-% plot(x_agg5_nodal6,'k-','Linewidth',2);hold on;
-% plot(x_agg5_nodal7,'k--','Linewidth',2')
+plot(x_agg5_nodal6,'k-','Linewidth',2);hold on;
+plot(x_agg5_nodal7,'k--','Linewidth',2')
 plot([1:24],B6*ones(1,24),'k--')
 plot([1:24],-B6*ones(1,24),'k--')
 plot([1:24],B7*ones(1,24),'k:')
 plot([1:24],-B7*ones(1,24),'k:')
 title(sprintf('Each prosumption for agg5, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
 ylabel('[GW]')
-% legend('nodal6','nodal7')
-legend('nodal5')
-
+legend('nodal6','nodal7')
 %---
 
 aggNo=1;%●●●
