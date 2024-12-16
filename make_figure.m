@@ -63,6 +63,7 @@ load(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel
     'g01_m','g02_m','g03_m','g04_m','g05_m','g06_m','g07_m','g08_m','g09_m','g10_m','g11_m','g12_m','g13_m',...%ƒZƒ‹
     'socialcost_i','B1','B2','B3','B4','B5','B6','B7');
 
+%foo
 %--- ‘S‘Ì‚ðŒ©‚é‚½‚ß‚É
 %figure(200);hold on;grid on;box on;
 figure
