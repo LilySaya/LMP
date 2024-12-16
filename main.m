@@ -5,7 +5,7 @@ clear;
 close all;
 clc
 %run('/Users/judy/Documents/MATLAB/cvx/cvx_setup')%
-% run('C:\Program Files\MATLAB\R2022a\cvx\cvx_setup')%
+%run('C:\Program Files\MATLAB\R2022a\cvx\cvx_setup')%
 %run('C:\Program Files\MATLAB\R2015b\cvx\cvx_setup')%
 %run('C:\Program Files\MATLAB\R2015b\cvx-w64\cvx\cvx_setup')%DesktopPC
 %run('C:\Program Files\MATLAB\R2016a\cvx\cvx_setup')%crest-notePC error
@@ -21,7 +21,7 @@ tic
 % for PVlevel=1:2;
 % for rate=10:5:100;
 %for batterylevel=[0:5:100];
-for batterylevel=3
+for batterylevel=0
 %--- Important parameter
 %--- You need to decide battry penetration level & to select PV level. ----
 %batterylevel=0;%[%] battery penetration level,which must be selected from 0 to 100.
@@ -99,6 +99,7 @@ n = 24;
 % Beq7=zeros(n,1);
 
 %Start to create Aeq
+%{
 rows = n;
 cols = n*N;
 % Initialize the matrix with zeros
@@ -114,8 +115,9 @@ end
 matrix = matrix(:, 1:cols);
 % Display the matrix
 Aeq = matrix;
+%}
 
-%Aeq = kron(eye(n),ones(1,N));
+Aeq = kron(eye(n),ones(1,N));
 Beq = zeros(n,1);
 %--- 
 
@@ -174,7 +176,7 @@ Bin = [Fmax+relaxation_term;-Fmin+relaxation_term];
 cvx_begin
 cvx_precision default
 
-variable w(N*n,1)% Decition variable, namely, prosumption profiles for all Agg.
+variable x(N*n,1)% Decition variable, namely, prosumption profiles for all Agg.
 dual variable y
 dual variable u
 
@@ -190,6 +192,8 @@ minimize(F(  w(0*n+1:1*n,1)+w(1*n+1:2*n,1)  ,1)+...
          F(w(12*n+1:13*n,1)+w(13*n+1:14*n,1),5))
          %%% Agg5 has 2 buses connected
 %}
+x_matrix = reshape(x, N, n)';
+w = reshape(x_matrix, [], 1);
 minimize(F(w(0*n+1:1*n,1),1) +...
          F(w(1*n+1:2*n,1),2) +...
          F(w(2*n+1:3*n,1),3) +...
@@ -198,9 +202,9 @@ minimize(F(w(0*n+1:1*n,1),1) +...
 % ---------------------------------------
 subject to
 %y:[Aeq1;Aeq2;Aeq3;Aeq4;Aeq5;Aeq6;Aeq7]*w == [Beq1;Beq2;Beq3;Beq4;Beq5;Beq6;Beq7];
-y:Aeq*w == Beq;
+y:Aeq*x == Beq;
 %y is system price for 24 time slots
-u:Ain*w <= Bin;
+u:Ain*x <= Bin;
 %u is composed as [(u_hat;u_check)*24 time slots] (288x1)
 cvx_end
 % -------------------------------------------
@@ -226,7 +230,7 @@ x_agg3_nodal5=optx(7*n+1:8*n,1);
 x_agg3_nodal6=optx(8*n+1:9*n,1);
 x_agg3_nodal7=optx(9*n+1:10*n,1);
 %---
-x_agg4_nodal4=optx(10*n+1:11*n,1);
+x_agg4_nodal4=optx(10*n+1:11*n,1);pr
 x_agg4_nodal5=optx(11*n+1:12*n,1);
 %---
 x_agg5_nodal6=optx(12*n+1:13*n,1);
