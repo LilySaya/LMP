@@ -97,7 +97,25 @@ n = 24;
 % Beq5=zeros(n,1);
 % Beq6=zeros(n,1);
 % Beq7=zeros(n,1);
-Aeq = kron(eye(n),ones(1,N));
+
+%Start to create Aeq
+rows = n;
+cols = n*N;
+% Initialize the matrix with zeros
+matrix = zeros(rows, cols);
+% Define the pattern
+pattern = [1, zeros(1, n-1)];
+% Fill the matrix
+for i = 1:rows
+    % Shift the pattern to the right by (i-1) slots
+    matrix(i, :) = circshift(repmat(pattern, 1, ceil(cols / length(pattern))), [0, i-1]);
+end
+% Keep only the first 120 columns
+matrix = matrix(:, 1:cols);
+% Display the matrix
+Aeq = matrix;
+
+%Aeq = kron(eye(n),ones(1,N));
 Beq = zeros(n,1);
 %--- 
 
@@ -187,7 +205,7 @@ u:Ain*w <= Bin;
 cvx_end
 % -------------------------------------------
 %**************************************************************************
-optx=w;% The optimal prosumption profiles for all Agg.
+optx= w;% The optimal prosumption profiles for all Agg.
 socialcost_i=cvx_optval%Social cost
 
 %{
@@ -239,21 +257,21 @@ u_hat = u(0*n+1:1*n*M,1); %(144x1) 6brachesx24timeslots
 congestion_price_max = (u_hat'*T_max)'; %(Bus1to5)x24timeslots (120x1)
 
 %Split for each busx24timeslots
-reshaped_cprice_max = reshape(congestion_price_max, 24, 5);
-cprice_max1 = reshaped_cprice_max(:, 1); % First column (bus 1 values)
-cprice_max2 = reshaped_cprice_max(:, 2); % Second column (bus 2 values)
-cprice_max3 = reshaped_cprice_max(:, 3); % Third column (bus 3 values)
-cprice_max4 = reshaped_cprice_max(:, 4); % Fourth column (bus 4 values)
-cprice_max5 = reshaped_cprice_max(:, 5); % Fifth column (bus 5 values)
+reshaped_cprice_max = reshape(congestion_price_max, 5, 24);
+cprice_max1 = reshaped_cprice_max(1, :)'; % First row (bus 1 values)
+cprice_max2 = reshaped_cprice_max(2, :)'; % Second row (bus 2 values)
+cprice_max3 = reshaped_cprice_max(3, :)'; % Third row (bus 3 values)
+cprice_max4 = reshaped_cprice_max(4, :)'; % Fourth row (bus 4 values)
+cprice_max5 = reshaped_cprice_max(5, :)'; % Fifth row (bus 5 values)
 
 u_check = u(1*n*M+1:2*n*M,1);
 congestion_price_min = (u_check'*T_max)';
-reshaped_cprice_min = reshape(congestion_price_min, 24, 5);
-cprice_min1 = reshaped_cprice_min(:, 1); % First column (bus 1 values)
-cprice_min2 = reshaped_cprice_min(:, 2); % Second column (bus 2 values)
-cprice_min3 = reshaped_cprice_min(:, 3); % Third column (bus 3 values)
-cprice_min4 = reshaped_cprice_min(:, 4); % Fourth column (bus 4 values)
-cprice_min5 = reshaped_cprice_min(:, 5); % Fifth column (bus 5 values)
+reshaped_cprice_min = reshape(congestion_price_min, 5, 24);
+cprice_min1 = reshaped_cprice_min(1, :)'; % First row (bus 1 values)
+cprice_min2 = reshaped_cprice_min(2, :)'; % Second row (bus 2 values)
+cprice_min3 = reshaped_cprice_min(3, :)'; % Third row (bus 3 values)
+cprice_min4 = reshaped_cprice_min(4, :)'; % Fourth row (bus 4 values)
+cprice_min5 = reshaped_cprice_min(5, :)'; % Fifth row (bus 5 values)
 
 % figure(200)
 % plot(lam1,'b-');hold on;
@@ -351,7 +369,7 @@ profit2=-cost2...
         cprice_min2)'*x_agg2_nodal2;%Profit for Agg.#2
 lmp2=(lam-...
         cprice_max2+...
-        cprice_min2)';
+        cprice_min2);
 %**************************************************************************
 %*** Profit for Agg.#3 ****************************************************
 %**************************************************************************
