@@ -21,7 +21,7 @@ tic
 % for PVlevel=1:2;
 % for rate=10:5:100;
 %for batterylevel=[0:5:100];
-for batterylevel=3
+for batterylevel=5
 %--- Important parameter
 %--- You need to decide battry penetration level & to select PV level. ----
 %batterylevel=0;%[%] battery penetration level,which must be selected from 0 to 100.
@@ -101,7 +101,7 @@ Aeq = kron(eye(n),ones(1,N));
 Beq = zeros(n,1);
 %--- 
 
-%--- ‘—“d—e—Ê[GW]
+%--- é€é›»å®¹é‡[GW]
 inp=[11.2;6.1;14.3;8.7;8;6.7];
 yo=inp.^(-1);
 B1=yo(1)/mean(yo)*6.7/8;
@@ -115,18 +115,15 @@ B = [B1, B3, B4, B7, B5, B3];
 % B = [5000, 2000, 3000, 2000, 40000, 8000];
 
 base_matrix = diag(ones(1,n));
-% tmp1 = [T;-T];
+tmp1 = [T;-T];
 T_max = kron(base_matrix,T);
 T_min = kron(base_matrix,-T);
 Ain = [T_max;T_min];
 
-% tmp2 = [B;-B];@
+tmp2 = [B;-B];ã€€%
 Fmax = reshape(repmat(B',1,n),[],1);
 Fmin = reshape(repmat(-B',1,n),[],1);
-% Bin = [Fmax;Fmax];
-relaxation_term = mean(Fmax);
-
-Bin = [Fmax+relaxation_term;-Fmin+relaxation_term];
+Bin = [Fmax;Fmax];
 
 %if T is minus, Fmax is okay
 
@@ -220,7 +217,7 @@ x_agg2_nodal2 = optx(1*n+1:2*n,1);
 x_agg3_nodal3=optx(2*n+1:3*n,1);
 x_agg4_nodal4=optx(3*n+1:4*n,1);
 x_agg5_nodal5=optx(4*n+1:5*n,1);
-%--- ‚±‚±‚Å‘‘n“d—Í‚ğ‚¨‚¢‚¿‚á‚¤D
+%--- ã“ã“ã§ç·å‰µé›»åŠ›ã‚’ãŠã„ã¡ã‚ƒã†ï¼
 x_giv{1}=x_agg1_nodal1;
 x_giv{2}=x_agg2_nodal2;
 x_giv{3}=x_agg3_nodal3;
@@ -312,7 +309,7 @@ cprice_min5 = reshaped_cprice_min(:, 5); % Fifth column (bus 5 values)
 
 
 
-%--- ƒm[ƒ_ƒ‹‚²‚Æ‚Ì‘n“d—Êi‚±‚±‚ª0‚É‚È‚Á‚Ä‚é‚Í‚¸j
+%--- ãƒãƒ¼ãƒ€ãƒ«ã”ã¨ã®å‰µé›»é‡ï¼ˆã“ã“ãŒ0ã«ãªã£ã¦ã‚‹ã¯ãšï¼‰
 % figure
 % plot(x_agg1_nodal1+x_agg2_nodal1);
 
@@ -491,7 +488,7 @@ end
 
 save(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel),...
     'x_agg1_nodal1','x_agg2_nodal2','x_agg3_nodal3','x_agg4_nodal4','x_agg5_nodal5',...
-    'x_giv',... %ƒZƒ‹
+    'x_giv',... %ã‚»ãƒ«
     'lam',...
     'u_hat',...
     'reshaped_cprice_max',...
@@ -502,10 +499,10 @@ save(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel
     'cost1','cost2','cost3','cost4','cost5',...
     'lmp1','lmp2','lmp3','lmp4','lmp5',...
     'profit1','profit2','profit3','profit4','profit5',...
-    'q','delta_in','delta_out','delta','yaa',...%ƒZƒ‹
-    'g01','g02','g03','g04','g05','g06','g07','g08','g09','g10','g11','g12','g13',...%ƒZƒ‹
-    'q_m','delta_m',...%ƒZƒ‹
-    'g01_m','g02_m','g03_m','g04_m','g05_m','g06_m','g07_m','g08_m','g09_m','g10_m','g11_m','g12_m','g13_m',...%ƒZƒ‹
+    'q','delta_in','delta_out','delta','yaa',...%ã‚»ãƒ«
+    'g01','g02','g03','g04','g05','g06','g07','g08','g09','g10','g11','g12','g13',...%ã‚»ãƒ«
+    'q_m','delta_m',...%ã‚»ãƒ«
+    'g01_m','g02_m','g03_m','g04_m','g05_m','g06_m','g07_m','g08_m','g09_m','g10_m','g11_m','g12_m','g13_m',...%ã‚»ãƒ«
     'socialcost_i','B1','B2','B3','B4','B5','B6','B7');
 toc
 end

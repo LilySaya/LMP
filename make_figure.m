@@ -14,8 +14,8 @@ set(0,'defaultTextFontName','century');
 %*** Plot Fig.1(a1),(a2),(a3) *********************************************
 %**************************************************************************
 %--- Read data_output -----------------------------------------------------
-batterylevel=50;%[%] battery penetration level
-PVlevel=3;%  1:=PV_Low
+batterylevel=5;%[%] battery penetration level
+PVlevel=1;%  1:=PV_Low
 %--- Decision coefficient of PV level -------------------------------------
 if PVlevel==1;
     PV_HorL=1;% PV_Low
@@ -45,8 +45,7 @@ set_parameter
     % 'socialcost_i','B1','B2','B3','B4','B5','B6','B7');
 
 load(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel),...
-    'x_agg1_nodal1','x_agg2_nodal2',...
-    'x_agg3_nodal3','x_agg4_nodal4','x_agg5_nodal5',...
+    'x_agg1_nodal1','x_agg2_nodal2','x_agg3_nodal3','x_agg4_nodal4','x_agg5_nodal5',...
     'x_giv',... %ƒZƒ‹
     'lam',...
     'u_hat',...
@@ -56,6 +55,7 @@ load(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel
     'reshaped_cprice_min',...
     'cprice_min1','cprice_min2','cprice_min3','cprice_min4','cprice_min5',...
     'cost1','cost2','cost3','cost4','cost5',...
+    'lmp1','lmp2','lmp3','lmp4','lmp5',...
     'profit1','profit2','profit3','profit4','profit5',...
     'q','delta_in','delta_out','delta','yaa',...%ƒZƒ‹
     'g01','g02','g03','g04','g05','g06','g07','g08','g09','g10','g11','g12','g13',...%ƒZƒ‹
@@ -77,13 +77,45 @@ figure
 
 Y=[lam];
 bar3(Y);
-title(sprintf('Price, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
+title(sprintf('LMP at Reference Bus, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
 %legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
 %bar(1:n,lam,'b','Linewidth',2);%
 ylabel('Time [h]','Fontname','Times','FontSize',15);
 zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
 %axis([0 25 0 12])
 zlim([0 12])
+
+figure
+u_hat_matrix = reshape(u_hat, 6, 24)
+bar3(u_hat_matrix');
+title(sprintf('u_hat (Upper Limit), PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
+%legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
+%bar(1:n,lam,'b','Linewidth',2);%
+ylabel('Time [h]','Fontname','Times','FontSize',15);
+zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
+%axis([0 25 0 12])
+zlim([0 12])
+
+figure
+u_check_matrix = reshape(u_check, 6, 24)
+bar3(u_check_matrix');
+title(sprintf('u_check (Lower Limit), PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
+%legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
+%bar(1:n,lam,'b','Linewidth',2);%
+ylabel('Time [h]','Fontname','Times','FontSize',15);
+zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
+%axis([0 25 0 12])
+zlim([0 12])
+
+figure
+LMP=[lmp1,lmp2,lmp3,lmp4,lmp5]
+bar3(LMP);
+title(sprintf('LMP, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
+%legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
+%bar(1:n,lam,'b','Linewidth',2);%
+ylabel('Time [h]','Fontname','Times','FontSize',15);
+zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
+%axis([0 25 0 12])
 
 
 figure(100)
