@@ -14,8 +14,8 @@ set(0,'defaultTextFontName','century');
 %*** Plot Fig.1(a1),(a2),(a3) *********************************************
 %**************************************************************************
 %--- Read data_output -----------------------------------------------------
-batterylevel=0;%[%] battery penetration level
-PVlevel=1;%  1:=PV_Low
+batterylevel=100;%[%] battery penetration level
+PVlevel=3;%  1:=PV_Low
 %--- Decision coefficient of PV level -------------------------------------
 if PVlevel==1;
     PV_HorL=1;% PV_Low
@@ -75,9 +75,9 @@ load(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel
 %stairs(0.5:24.5,[lam1;lam1(24)],'r-','Linewidth',5);
 
 figure
-Y=[lam];
-bar3(Y);
-title(sprintf('System-wide Price, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
+lambda=[lam];
+bar3(lambda);
+title(sprintf('System-wide Price($\\lambda$), PVlevel:%d Batterylevel:%d',PVlevel,batterylevel), 'Interpreter', 'latex')
 %legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
 %bar(1:n,lam,'b','Linewidth',2);%
 ylabel('Time [h]','Fontname','Times','FontSize',15);
@@ -649,8 +649,8 @@ figure
 % bar(1:24,lam6,'k-','Linewidth',2,'FaceAlpha',.4);
 % bar(1:24,lam7,'k--','Linewidth',2,'FaceAlpha',.4)
 %stairs(0.5:24.5,[lam1;lam1(24)],'r-','Linewidth',5);
-Y=[lam1 lam2 lam3 lam4 lam5 lam6 lam7];
-bar3(Y);
+lambda=[lam1 lam2 lam3 lam4 lam5 lam6 lam7];
+bar3(lambda);
 title(sprintf('Price, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
 %legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
 %bar(1:n,lam,'b','Linewidth',2);%
