@@ -14,8 +14,8 @@ set(0,'defaultTextFontName','century');
 %*** Plot Fig.1(a1),(a2),(a3) *********************************************
 %**************************************************************************
 %--- Read data_output -----------------------------------------------------
-batterylevel=25;%[%] battery penetration level
-PVlevel=1;%  1:=PV_Low
+batterylevel=0;%[%] battery penetration level
+PVlevel=3;%  1:=PV_Low
 %--- Decision coefficient of PV level -------------------------------------
 if PVlevel==1;
     PV_HorL=1;% PV_Low
