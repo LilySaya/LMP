@@ -145,8 +145,7 @@ Ain = [T_max;T_min];
 Fmax = reshape(repmat(B',1,n),[],1);
 Fmin = reshape(repmat(-B',1,n),[],1);
 % Bin = [Fmax;Fmax];
-relaxation_term = mean(Fmax);
-
+% relaxation_term = mean(Fmax);
 % Bin = [Fmax+relaxation_term;-Fmin+relaxation_term];
 Bin = [Fmax;-Fmin];
 
@@ -208,6 +207,7 @@ y:Aeq*x == Beq;
 %y is system price for 24 time slots
 u:Ain*x <= Bin;
 %u is composed as [(u_hat;u_check)*24 time slots] (288x1)
+%u_hat for Tmax and Fmax / u_check for Tmin and -Fmin
 cvx_end
 % -------------------------------------------
 %**************************************************************************
@@ -430,6 +430,10 @@ profit5=-cost5...
 lmp5=(lam-...
         cprice_max5+...
         cprice_min5);
+
+income = [lam'*x_agg1_nodal1, lam'*x_agg2_nodal2, lam'*x_agg3_nodal3, lam'*x_agg4_nodal4, lam'*x_agg5_nodal5];
+% income*ones(5,1) %sum of all income equal to 0
+
 %**************************************************************************
 %*** Calculation of Scenarios for Agg.#1 to #10 ***************************
 %**************************************************************************
