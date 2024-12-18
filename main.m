@@ -5,7 +5,7 @@ clear;
 close all;
 clc
 %run('/Users/judy/Documents/MATLAB/cvx/cvx_setup')%
-run('/Users/judym/Documents/MATLAB/cvx/cvx_setup')%
+run('/Users/ByeonghwaLee/Documents/MATLAB/cvx/cvx_setup')%
 %run('C:\Program Files\MATLAB\R2022a\cvx\cvx_setup')%
 %run('C:\Program Files\MATLAB\R2015b\cvx\cvx_setup')%
 %run('C:\Program Files\MATLAB\R2015b\cvx-w64\cvx\cvx_setup')%DesktopPC
@@ -22,7 +22,7 @@ tic
 % for PVlevel=1:2;
 % for rate=10:5:100;
 %for batterylevel=[0:5:100];
-for batterylevel=0
+for batterylevel=50
 %--- Important parameter
 %--- You need to decide battry penetration level & to select PV level. ----
 %batterylevel=0;%[%] battery penetration level,which must be selected from 0 to 100.
@@ -132,7 +132,7 @@ B4=yo(3)/mean(yo)*6.7/8;
 B5=yo(4)/mean(yo)*6.7/8;
 B6=yo(5)/mean(yo)*6.7/8;
 B7=yo(6)/mean(yo)*6.7/8;
-B = [B1, B3, B4, B7, B5, B3];
+B = [B1, B3, B4, B7, B5, B3]*2;
 % B = [5000, 2000, 3000, 2000, 40000, 8000];
 
 base_matrix = diag(ones(1,n));
