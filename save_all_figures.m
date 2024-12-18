@@ -33,7 +33,12 @@
 
 
 % Directory to save figures
-foldername = '/Users/byeonghwalee/Documents/MATLAB/LMP/Figures/PV1_BLV0/4';
+foldername = '/Users/byeonghwalee/Documents/MATLAB/LMP/Figures/PV1_BLV100/4';
+
+% Check if the folder exists; if not, create it
+if ~exist(foldername, 'dir')
+    mkdir(foldername);
+end
 
 % Find all open figures
 figHandles = findall(0, 'Type', 'figure'); 
