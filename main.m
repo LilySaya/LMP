@@ -133,7 +133,7 @@ B4=yo(3)/mean(yo)*6.7/8;
 B5=yo(4)/mean(yo)*6.7/8;
 B6=yo(5)/mean(yo)*6.7/8;
 B7=yo(6)/mean(yo)*6.7/8;
-B = [B1, B3, B4, B7, B5, B3]*0.2;
+B = [B1, B3, B4, B7, B5, B3];
 % B = [5000, 2000, 3000, 2000, 40000, 8000];
 
 base_matrix = diag(ones(1,n));
