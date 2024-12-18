@@ -15,7 +15,7 @@ set(0,'defaultTextFontName','century');
 %**************************************************************************
 %--- Read data_output -----------------------------------------------------
 batterylevel=0;%[%] battery penetration level
-PVlevel=3;%  1:=PV_Low
+PVlevel=1;%  1:=PV_Low
 %--- Decision coefficient of PV level -------------------------------------
 if PVlevel==1;
     PV_HorL=1;% PV_Low
