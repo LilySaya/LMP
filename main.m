@@ -5,7 +5,7 @@ clear;
 close all;
 clc
 %run('/Users/judy/Documents/MATLAB/cvx/cvx_setup')%
-run('/Users/ByeonghwaLee/Documents/MATLAB/cvx/cvx_setup')%
+run('/Users/judym/Documents/MATLAB/cvx/cvx_setup')%
 %run('C:\Program Files\MATLAB\R2022a\cvx\cvx_setup')%
 %run('C:\Program Files\MATLAB\R2015b\cvx\cvx_setup')%
 %run('C:\Program Files\MATLAB\R2015b\cvx-w64\cvx\cvx_setup')%DesktopPC
@@ -22,11 +22,11 @@ tic
 % for PVlevel=1:2;
 % for rate=10:5:100;
 %for batterylevel=[0:5:100];
-for batterylevel=100
+for batterylevel=0
 %--- Important parameter
 %--- You need to decide battry penetration level & to select PV level. ----
 %batterylevel=0;%[%] battery penetration level,which must be selected from 0 to 100.
-PVlevel=2;% It must be selected 1 or 2, 1:=PV_Low, 2:=PV_High
+PVlevel=3;% It must be selected 1 or 2, 1:=PV_Low, 2:=PV_High
 
 %--- Decision coefficient of PV level -------------------------------------
 if PVlevel==1;

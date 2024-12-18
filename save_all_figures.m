@@ -33,7 +33,7 @@
 
 
 % Directory to save figures
-foldername = '/Users/byeonghwalee/Documents/MATLAB/LMP/Figures/PV2_BLV100/4';
+foldername = '/Users/judym/Desktop/untitled folder/Figures/PV3_BLV0/1';
 
 % Check if the folder exists; if not, create it
 if ~exist(foldername, 'dir')
