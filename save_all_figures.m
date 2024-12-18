@@ -1,5 +1,39 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 % Directory to save figures
-foldername = '/Users/byeonghwalee/Documents/MATLAB/LMP/Figures/PV1_BLV0/1';
+foldername = '/Users/byeonghwalee/Documents/MATLAB/LMP/Figures/PV1_BLV0/4';
 
 % Find all open figures
 figHandles = findall(0, 'Type', 'figure'); 
