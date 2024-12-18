@@ -61,8 +61,9 @@ B_susceptance = [H(1,1)+H(6,6), -H(1,1), 0, -H(6,6), 0;
                  -H(6,6), 0, -H(3,3), H(3,3)+H(5,5)+H(6,6), -H(5,5);
                  0, 0, -H(4,4), -H(5,5), +H(4,4)+H(5,5)]
 B_susceptance_prime = B_susceptance(1:4,1:4)
+B_inv = inv(B_susceptance_prime)
 
-T = X*[inv(B_susceptance_prime), zeros(4,1);zeros(1,4), 0]
+T = X*[B_inv, zeros(4,1);zeros(1,4), 0]
 
 
 [M,N] = size(T);
@@ -132,7 +133,7 @@ B4=yo(3)/mean(yo)*6.7/8;
 B5=yo(4)/mean(yo)*6.7/8;
 B6=yo(5)/mean(yo)*6.7/8;
 B7=yo(6)/mean(yo)*6.7/8;
-B = [B1, B3, B4, B7, B5, B3]*2;
+B = [B1, B3, B4, B7, B5, B3]*0.2;
 % B = [5000, 2000, 3000, 2000, 40000, 8000];
 
 base_matrix = diag(ones(1,n));

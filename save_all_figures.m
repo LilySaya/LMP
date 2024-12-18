@@ -1,39 +1,5 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 % Directory to save figures
-foldername = '/Users/byeonghwalee/Documents/MATLAB/LMP/Figures/送電容量0.5倍/PV3_BLV50/4';
+foldername = '/Users/byeonghwalee/Documents/MATLAB/LMP/Figures/Reactance5倍/PV3_BLV50/4';
 
 % Check if the folder exists; if not, create it
 if ~exist(foldername, 'dir')

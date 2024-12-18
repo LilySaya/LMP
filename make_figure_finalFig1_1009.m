@@ -17,7 +17,7 @@ set(0,'defaultTextFontName','century');
 batterylevel=50;%[%] battery penetration level
 PVlevel=3;%  1:=PV_Low
 %--- Decision coefficient of PV level -------------------------------------
-if PVlevel==1;
+if PVlevel==1
     PV_HorL=1;% PV_Low
 elseif PVlevel==2;
     PV_HorL=3.9;% PV_High
