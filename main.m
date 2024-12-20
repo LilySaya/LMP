@@ -22,7 +22,7 @@ tic
 % for PVlevel=1:2;
 % for rate=10:5:100;
 %for batterylevel=[0:5:100];
-for batterylevel=50
+for batterylevel=25
 %--- Important parameter
 %--- You need to decide battry penetration level & to select PV level. ----
 %batterylevel=0;%[%] battery penetration level,which must be selected from 0 to 100.
@@ -44,7 +44,7 @@ end
 set_parameter% read input_data using mfile named "set_parameter.m"
 n=length(Agg(1).load);% Calculation of size for load
 
-H_reactance = diag(TransmissionLine.line_reactance)*5
+H_reactance = diag(TransmissionLine.line_reactance)
 % H_reactance = diag([0.00000001,0.00000001,0.00000001,0.00000001,0.00000001,0.00000001])
 H = inv(H_reactance)
 
@@ -61,10 +61,17 @@ B_susceptance = [H(1,1)+H(6,6), -H(1,1), 0, -H(6,6), 0;
                  -H(6,6), 0, -H(3,3), H(3,3)+H(5,5)+H(6,6), -H(5,5);
                  0, 0, -H(4,4), -H(5,5), +H(4,4)+H(5,5)]
 B_susceptance_prime = B_susceptance(1:4,1:4)
-B_inv = inv(B_susceptance_prime)
+% B_susceptance_prime = B_susceptance(2:5,2:5)
+% B_susceptance_prime = [B_susceptance(1:2,1:2), B_susceptance(1:2,4:5); B_susceptance(4:5,1:2), B_susceptance(4:5,4:5)]
 
-T = X*[B_inv, zeros(4,1);zeros(1,4), 0]
+Bsp_inv = inv(B_susceptance_prime)
 
+temp = [Bsp_inv, zeros(4,1); zeros(1,4), 0]
+T = X*[Bsp_inv, zeros(4,1); zeros(1,4), 0]
+% T = X*[0, zeros(1,4); zeros(4,1), Bsp_inv]
+% T = X*[Bsp_inv(1:2,1:2), zeros(2,1), Bsp_inv(1:2,3:4);
+%        zeros(1,5);
+%        Bsp_inv(3:4,1:2), zeros(2,1), Bsp_inv(3:4,3:4)]
 
 [M,N] = size(T);
 %M: number of brances
@@ -440,6 +447,7 @@ income = [lam'*x_agg1_nodal1, lam'*x_agg2_nodal2, lam'*x_agg3_nodal3, lam'*x_agg
 % income*ones(5,1) %sum of all income equal to 0
 LMP = [lmp1, lmp2, lmp3, lmp4, lmp5]
 Profit = [profit1, profit2, profit3, profit4, profit5]
+MCC = [MCC1 MCC2 MCC3 MCC4 MCC5]
 
 %**************************************************************************
 %*** Calculation of Scenarios for Agg.#1 to #10 ***************************
