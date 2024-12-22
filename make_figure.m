@@ -14,7 +14,7 @@ set(0,'defaultTextFontName','century');
 %*** Plot Fig.1(a1),(a2),(a3) *********************************************
 %**************************************************************************
 %--- Read data_output -----------------------------------------------------
-batterylevel=25;%[%] battery penetration level
+batterylevel=0;%[%] battery penetration level
 PVlevel=3;%  1:=PV_Low
 %--- Decision coefficient of PV level -------------------------------------
 if PVlevel==1;
@@ -44,8 +44,9 @@ set_parameter
 %     'g01_m','g02_m','g03_m','g04_m','g05_m','g06_m','g07_m','g08_m','g09_m','g10_m','g11_m','g12_m','g13_m',...%ƒZƒ‹
     % 'socialcost_i','B1','B2','B3','B4','B5','B6','B7');
 
-load(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel),...
-    'x_agg1_nodal1','x_agg2_nodal2','x_agg3_nodal3','x_agg4_nodal4','x_agg5_nodal5',...
+% load(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel),...
+load(sprintf('DATA/data_output_PVlevel3_Batterylevel0_LMP'),...
+   'x_agg1_nodal1','x_agg2_nodal2','x_agg3_nodal3','x_agg4_nodal4','x_agg5_nodal5',...
     'x_giv',... %ƒZƒ‹
     'lam',...
     'u_hat',...
@@ -76,14 +77,15 @@ load(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel
 
 figure
 lambda=[lam];
-bar3(lambda);
+bar(lambda);
 title(sprintf('System-wide Price($\\lambda$), PVlevel:%d Batterylevel:%d',PVlevel,batterylevel), 'Interpreter', 'latex')
 %legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
 %bar(1:n,lam,'b','Linewidth',2);%
-ylabel('Time [h]','Fontname','Times','FontSize',15);
-zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
+xlabel('Time [h]','Fontname','Times','FontSize',17);
+ylabel('Price [JPY/kWh]','Fontname','Times','FontSize',17);
+grid on
 %axis([0 25 0 12])
-zlim([0 12])
+ylim([0 6])
 
 figure
 u_hat_matrix = reshape(u_hat, 6, 24)
@@ -93,6 +95,7 @@ title(sprintf('$\\hat{u}$ (Upper Limit), PVlevel:%d Batterylevel:%d', PVlevel, b
 %bar(1:n,lam,'b','Linewidth',2);%
 ylabel('Time [h]','Fontname','Times','FontSize',15);
 zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
+xlabel('Bus','Fontname','Times','FontSize',15)
 %axis([0 25 0 12])
 zlim([0 12])
 
@@ -104,17 +107,25 @@ title(sprintf('$\\check{u}$ (Lower Limit), PVlevel:%d Batterylevel:%d', PVlevel,
 %bar(1:n,lam,'b','Linewidth',2);%
 ylabel('Time [h]','Fontname','Times','FontSize',15);
 zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
+xlabel('Bus','Fontname','Times','FontSize',15)
 %axis([0 25 0 12])
 zlim([0 12])
 
 figure
 LMP=[lmp1,lmp2,lmp3,lmp4,lmp5]
 bar3(LMP);
-title(sprintf('LMP, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
+title(sprintf('LMP, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel), 'Interpreter', 'latex')
 %legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
 %bar(1:n,lam,'b','Linewidth',2);%
 ylabel('Time [h]','Fontname','Times','FontSize',15);
 zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
+xlabel('Bus','Fontname','Times','FontSize',15)
+xlabelHandle = get(gca, 'XLabel'); % Get handle for x-axis label
+xlabelHandle.Rotation = 30;       % Set rotation to 30 degrees
+ylabelHandle = get(gca, 'YLabel'); % Get handle for x-axis label
+ylabelHandle.Rotation = -30;       % Set rotation to 30 degrees
+% zlim([0 15])
+
 %axis([0 25 0 12])
 
 
