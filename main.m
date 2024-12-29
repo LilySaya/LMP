@@ -5,7 +5,7 @@ clear;
 close all;
 clc
 %run('/Users/judy/Documents/MATLAB/cvx/cvx_setup')%
-run('/Users/ByeonghwaLee/Documents/MATLAB/cvx/cvx_setup')%
+%run('/Users/ByeonghwaLee/Documents/MATLAB/cvx/cvx_setup')%
 %run('C:\Program Files\MATLAB\R2022a\cvx\cvx_setup')%
 %run('C:\Program Files\MATLAB\R2015b\cvx\cvx_setup')%
 %run('C:\Program Files\MATLAB\R2015b\cvx-w64\cvx\cvx_setup')%DesktopPC
@@ -22,7 +22,11 @@ tic
 % for PVlevel=1:2;
 % for rate=10:5:100;
 %for batterylevel=[0:5:100];
-for batterylevel=25
+batterylevel_1= 0;
+batterylevel_2= 0;
+batterylevel_3= 25;
+batterylevel_4= 25; 
+batterylevel_5= 25;
 %--- Important parameter
 %--- You need to decide battry penetration level & to select PV level. ----
 %batterylevel=0;%[%] battery penetration level,which must be selected from 0 to 100.
@@ -41,7 +45,12 @@ end
 %**************************************************************************
 %*** Read Input_data ******************************************************
 %**************************************************************************
-set_parameter% read input_data using mfile named "set_parameter.m"
+% read input_data using mfile named "set_parameter.m"
+set_parameter(1,batterylevel_1, PV_HorL);
+set_parameter(2,batterylevel_2, PV_HorL);
+set_parameter(3,batterylevel_3, PV_HorL);
+set_parameter(4,batterylevel_4, PV_HorL);
+set_parameter(5,batterylevel_5, PV_HorL);
 n=length(Agg(1).load);% Calculation of size for load
 
 H_reactance = diag(TransmissionLine.line_reactance)
@@ -201,6 +210,8 @@ minimize(F(  w(0*n+1:1*n,1)+w(1*n+1:2*n,1)  ,1)+...
          F(w(12*n+1:13*n,1)+w(13*n+1:14*n,1),5))
          %%% Agg5 has 2 buses connected
 %}
+%x: [all bus values of x] times timeslots
+%w: [all timeslot values of x1] times 5 buses
 x_matrix = reshape(x, N, n)';
 w = reshape(x_matrix, [], 1);
 minimize(F(w(0*n+1:1*n,1),1) +...
@@ -448,7 +459,14 @@ income = [lam'*x_agg1_nodal1, lam'*x_agg2_nodal2, lam'*x_agg3_nodal3, lam'*x_agg
 LMP = [lmp1, lmp2, lmp3, lmp4, lmp5]
 Profit = [profit1, profit2, profit3, profit4, profit5]
 MCC = [MCC1 MCC2 MCC3 MCC4 MCC5]
+X_giv = [x_giv{1} x_giv{2} x_giv{3} x_giv{4} x_giv{5}]
+COST = [cost1 cost2 cost3 cost4 cost5]
 
+flow = T_max*x;
+flow_matrix = reshape(flow, M, n)';
+
+%Note: be careful of the difference between variable x and x_giv
+%x_giv is calculated from w, while x is x
 %**************************************************************************
 %*** Calculation of Scenarios for Agg.#1 to #10 ***************************
 %**************************************************************************
@@ -531,8 +549,8 @@ for aggNo=1:5;
     %----------------------------------------------------------------------
 end
 
-
-save(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel),...
+test1 = 99999;
+save(sprintf('DATA/data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,test1),...
     'x_agg1_nodal1','x_agg2_nodal2','x_agg3_nodal3','x_agg4_nodal4','x_agg5_nodal5',...
     'x_giv',... %ƒZƒ‹
     'lam',...
@@ -551,7 +569,7 @@ save(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel
     'g01_m','g02_m','g03_m','g04_m','g05_m','g06_m','g07_m','g08_m','g09_m','g10_m','g11_m','g12_m','g13_m',...%ƒZƒ‹
     'socialcost_i','B1','B2','B3','B4','B5','B6','B7');
 toc
-end
+
 xxxxxxxxxxx
     % 'lam1','lam2','lam3','lam4','lam5','lam6','lam7',...
 

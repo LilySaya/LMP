@@ -1,7 +1,8 @@
+function [] = set_parameter(AggNum, batterylevel, PV_HorL)
 global Agg
 global TransmissionLine
 
-for aggNo=1:5;% we focus on Agg.# aggNo
+for aggNo=AggNum;% we focus on Agg.# aggNo
     %--- Read data_input.xlsx
     temp_load=xlsread('data_input',aggNo,'C3:C26');%Load
     temp_pv=xlsread('data_input',aggNo,'D3:M26');%PV scenario
