@@ -14,7 +14,7 @@ set(0,'defaultTextFontName','century');
 %*** Plot Fig.1(a1),(a2),(a3) *********************************************
 %**************************************************************************
 %--- Read data_output -----------------------------------------------------
-batterylevel=0;%[%] battery penetration level
+batterylevel=50;%[%] battery penetration level
 PVlevel=3;%  1:=PV_Low
 %--- Decision coefficient of PV level -------------------------------------
 if PVlevel==1;
@@ -27,7 +27,7 @@ else
     error('incorect PVlevel')
 end
 %--------------------------------------------------------------------------
-set_parameter
+% set_parameter
 % load(sprintf('data_output_PVlevel%d_Batterylevel%d.mat',PVlevel,batterylevel),...
 %     'x_agg1_nodal1','x_agg1_nodal2',...
 %     'x_agg2_nodal1','x_agg2_nodal2','x_agg2_nodal3',...
@@ -45,7 +45,7 @@ set_parameter
     % 'socialcost_i','B1','B2','B3','B4','B5','B6','B7');
 
 % load(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel),...
-load(sprintf('DATA/data_output_PVlevel3_Batterylevel0_LMP'),...
+load(sprintf('DATA/data_output_PVlevel3_Batterylevel50_LMP_agg1&2_0'),...
    'x_agg1_nodal1','x_agg2_nodal2','x_agg3_nodal3','x_agg4_nodal4','x_agg5_nodal5',...
     'x_giv',... %ƒZƒ‹
     'lam',...
@@ -78,14 +78,14 @@ load(sprintf('DATA/data_output_PVlevel3_Batterylevel0_LMP'),...
 figure
 lambda=[lam];
 bar(lambda);
-title(sprintf('System-wide Price($\\lambda$), PVlevel:%d Batterylevel:%d',PVlevel,batterylevel), 'Interpreter', 'latex')
+% title(sprintf('System-wide Price($\\lambda$), PVlevel:%d Batterylevel:%d',PVlevel,batterylevel), 'Interpreter', 'latex')
 %legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
 %bar(1:n,lam,'b','Linewidth',2);%
 xlabel('Time [h]','Fontname','Times','FontSize',17);
 ylabel('Price [JPY/kWh]','Fontname','Times','FontSize',17);
 grid on
 %axis([0 25 0 12])
-ylim([0 6])
+ylim([-5 6])
 
 figure
 u_hat_matrix = reshape(u_hat, 6, 24)
@@ -121,11 +121,11 @@ ylabel('Time [h]','Fontname','Times','FontSize',15);
 zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
 xlabel('Bus','Fontname','Times','FontSize',15)
 xlabelHandle = get(gca, 'XLabel'); % Get handle for x-axis label
-xlabelHandle.Rotation = 30;       % Set rotation to 30 degrees
+xlabelHandle.Rotation = 35;       % Set rotation to 30 degrees
 ylabelHandle = get(gca, 'YLabel'); % Get handle for x-axis label
-ylabelHandle.Rotation = -30;       % Set rotation to 30 degrees
-% zlim([0 15])
-
+ylabelHandle.Rotation = -15;       % Set rotation to 30 degrees
+zlim([-15 15])
+view(-50, 27); % Azimuth=45 degrees, Elevation=30 degrees
 %axis([0 25 0 12])
 
 

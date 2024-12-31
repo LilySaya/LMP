@@ -9,12 +9,18 @@ set(0,'defaultAxesFontSize',12);
 set(0,'defaultAxesFontName','century');
 set(0,'defaultTextFontSize',12);
 set(0,'defaultTextFontName','century');
+global Agg
 
 %**************************************************************************
 %*** Plot Fig.1(a1),(a2),(a3) *********************************************
 %**************************************************************************
 %--- Read data_output -----------------------------------------------------
 batterylevel=50;%[%] battery penetration level
+batterylevel_1= 0;
+batterylevel_2= 0;
+batterylevel_3= 50;
+batterylevel_4= 50; 
+batterylevel_5= 50;
 PVlevel=3;%  1:=PV_Low
 %--- Decision coefficient of PV level -------------------------------------
 if PVlevel==1;
@@ -27,7 +33,12 @@ else
     error('incorect PVlevel')
 end
 %--------------------------------------------------------------------------
-set_parameter
+set_parameter(1,batterylevel_1, PV_HorL);
+set_parameter(2,batterylevel_2, PV_HorL);
+set_parameter(3,batterylevel_3, PV_HorL);
+set_parameter(4,batterylevel_4, PV_HorL);
+set_parameter(5,batterylevel_5, PV_HorL);
+
 % load(sprintf('data_output_PVlevel%d_Batterylevel%d.mat',PVlevel,batterylevel),...
 %     'x_agg1_nodal1','x_agg1_nodal2',...
 %     'x_agg2_nodal1','x_agg2_nodal2','x_agg2_nodal3',...
@@ -44,7 +55,7 @@ set_parameter
 %     'g01_m','g02_m','g03_m','g04_m','g05_m','g06_m','g07_m','g08_m','g09_m','g10_m','g11_m','g12_m','g13_m',...%ƒZƒ‹
 %     'socialcost_i','B1','B2','B3','B4','B5','B6','B7');
 
-load(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel),...
+load(sprintf('DATA/data_output_PVlevel3_Batterylevel50_LMP_agg1&2_0'),...
     'x_agg1_nodal1','x_agg2_nodal2',...
     'x_agg3_nodal3','x_agg4_nodal4','x_agg5_nodal5',...
     'x_giv',... %ƒZƒ‹
