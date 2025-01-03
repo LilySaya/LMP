@@ -1,4 +1,4 @@
-%**************************************************************************
+1%**************************************************************************
 %*** Header ***************************************************************
 %**************************************************************************
 clear;
@@ -22,11 +22,12 @@ tic
 % for PVlevel=1:2;
 % for rate=10:5:100;
 %for batterylevel=[0:5:100];
+batterylevel = 0;
 batterylevel_1= 0;
 batterylevel_2= 0;
-batterylevel_3= 25;
-batterylevel_4= 25; 
-batterylevel_5= 25;
+batterylevel_3= 0;
+batterylevel_4= 0; 
+batterylevel_5= 0;
 %--- Important parameter
 %--- You need to decide battry penetration level & to select PV level. ----
 %batterylevel=0;%[%] battery penetration level,which must be selected from 0 to 100.
@@ -549,8 +550,8 @@ for aggNo=1:5;
     %----------------------------------------------------------------------
 end
 
-test1 = 99999;
-save(sprintf('DATA/data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,test1),...
+save(sprintf('DATA/data_output_PVlevel%d_Batterylevel%d_LMP_agg1&2_0.mat',PVlevel, batterylevel ...
+    ),...
     'x_agg1_nodal1','x_agg2_nodal2','x_agg3_nodal3','x_agg4_nodal4','x_agg5_nodal5',...
     'x_giv',... %ƒZƒ‹
     'lam',...
