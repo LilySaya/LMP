@@ -510,8 +510,8 @@ for aggNo=1:5;
     g13_m{aggNo}=zeros(n,1);
     %----------------------------------------------------------------------
     for ii=1:10;%Calculation of PV curtail, C/D power, and SOC for scenario.#ii
-        % [optf,optz]=Fprime(x_giv{aggNo},Agg(aggNo).hpv{ii},ii,aggNo);
-        [optf,optz]=Fprime(x_giv{aggNo},Agg(aggNo).hpv{2},2,aggNo);
+        [optf,optz]=Fprime(x_giv{aggNo},Agg(aggNo).hpv{ii},ii,aggNo);
+        % [optf,optz]=Fprime(x_giv{aggNo},Agg(aggNo).hpv{2},2,aggNo);
         q{aggNo}{ii}=optz(1:n);%PV curtail profile for scenario#ii
         delta_in{aggNo}{ii}=optz(n+1:2*n);%Charge power profile for scenario#ii
         delta_out{aggNo}{ii}=optz(2*n+1:3*n);%Discharge power profile for scenario#ii
