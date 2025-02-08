@@ -263,15 +263,15 @@ x_agg5_nodal7=optx(13*n+1:14*n,1);
 %}
 x_agg1_nodal1 = optx(0*n+1:1*n,1);
 x_agg2_nodal2 = optx(1*n+1:2*n,1);
-x_agg3_nodal3=optx(2*n+1:3*n,1);
-x_agg4_nodal4=optx(3*n+1:4*n,1);
-x_agg5_nodal5=optx(4*n+1:5*n,1);
+x_agg3_nodal3 = optx(2*n+1:3*n,1);
+x_agg4_nodal4 = optx(3*n+1:4*n,1);
+x_agg5_nodal5 = optx(4*n+1:5*n,1);
 %--- ここで総創電力をおいちゃう．
-x_giv{1}=x_agg1_nodal1;
-x_giv{2}=x_agg2_nodal2;
-x_giv{3}=x_agg3_nodal3;
-x_giv{4}=x_agg4_nodal4;
-x_giv{5}=x_agg5_nodal5;
+x_giv{1} = x_agg1_nodal1;
+x_giv{2} = x_agg2_nodal2;
+x_giv{3} = x_agg3_nodal3;
+x_giv{4} = x_agg4_nodal4;
+x_giv{5} = x_agg5_nodal5;
 
 %{
 lam1=y(0*n+1:1*n,1);% Clearing price
@@ -510,8 +510,8 @@ for aggNo=1:5;
     g13_m{aggNo}=zeros(n,1);
     %----------------------------------------------------------------------
     for ii=1:10;%Calculation of PV curtail, C/D power, and SOC for scenario.#ii
-        [optf,optz]=Fprime(x_giv{aggNo},Agg(aggNo).hpv{ii},aggNo);
-        % [optf,optz]=Fprime(x_giv{aggNo},Agg(aggNo).hpv{2},aggNo);
+        % [optf,optz]=Fprime(x_giv{aggNo},Agg(aggNo).hpv{ii},ii,aggNo);
+        [optf,optz]=Fprime(x_giv{aggNo},Agg(aggNo).hpv{2},2,aggNo);
         q{aggNo}{ii}=optz(1:n);%PV curtail profile for scenario#ii
         delta_in{aggNo}{ii}=optz(n+1:2*n);%Charge power profile for scenario#ii
         delta_out{aggNo}{ii}=optz(2*n+1:3*n);%Discharge power profile for scenario#ii
@@ -570,16 +570,31 @@ for aggNo=1:5;
 end
 
 %**************************************************************************
-% F(x_agg1_nodal1,1);
-% F(x_agg2_nodal2,2);
-% F(x_agg3_nodal3,3);
-% F(x_agg4_nodal4,4);
-% F(x_agg5_nodal5,5);
-load('cost_vec_aggNo1.mat')
-load('cost_vec_aggNo2.mat')
-load('cost_vec_aggNo3.mat')
-load('cost_vec_aggNo4.mat')
-load('cost_vec_aggNo5.mat')
+for i=1:5
+    for j=1:10
+        load(fullfile('/Users/byeonghwalee/Documents/MATLAB/LMP/cost_vectors', ['cost_vec_aggNo' num2str(i) '_PVscenario' num2str(j) '.mat']))
+    end
+end
+
+for i = 1:5
+    % Initialization
+    eval(['cost_vector' num2str(i) ' = zeros(size(cost_vec1_PVscenario1));']);
+    for j = 1:10
+        eval(['cost_vector' num2str(i) ' = cost_vector' num2str(i) ' + cost_vec' num2str(i) '_PVscenario' num2str(j) ';']);
+    end
+end
+
+cost_vector1 = cost_vector1 ./ 10;
+cost_vector2 = cost_vector2 ./ 10;
+cost_vector3 = cost_vector3 ./ 10;
+cost_vector4 = cost_vector4 ./ 10;
+cost_vector5 = cost_vector5 ./ 10;
+
+clear cost_vec1*;
+clear cost_vec2*;
+clear cost_vec3*;
+clear cost_vec4*;
+clear cost_vec5*;
 %**************************************************************************
 
 save(sprintf('DATA/data_output_PVlevel%d_Batterylevel%d_LMP_agg1&2_0.mat',PVlevel, batterylevel ...
@@ -596,7 +611,7 @@ save(sprintf('DATA/data_output_PVlevel%d_Batterylevel%d_LMP_agg1&2_0.mat',PVleve
     'cost1','cost2','cost3','cost4','cost5',...
     'lmp1','lmp2','lmp3','lmp4','lmp5',...
     'profit1','profit2','profit3','profit4','profit5',...
-    'cost_vec1', 'cost_vec2', 'cost_vec3', 'cost_vec4', 'cost_vec5',...
+    'cost_vector1', 'cost_vector2', 'cost_vector3', 'cost_vector4', 'cost_vector5',...
     'q','delta_in','delta_out','delta','yaa',...%セル
     'g01','g02','g03','g04','g05','g06','g07','g08','g09','g10','g11','g12','g13',...%セル
     'q_m','delta_m',...%セル

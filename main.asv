@@ -263,15 +263,15 @@ x_agg5_nodal7=optx(13*n+1:14*n,1);
 %}
 x_agg1_nodal1 = optx(0*n+1:1*n,1);
 x_agg2_nodal2 = optx(1*n+1:2*n,1);
-x_agg3_nodal3=optx(2*n+1:3*n,1);
-x_agg4_nodal4=optx(3*n+1:4*n,1);
-x_agg5_nodal5=optx(4*n+1:5*n,1);
+x_agg3_nodal3 = optx(2*n+1:3*n,1);
+x_agg4_nodal4 = optx(3*n+1:4*n,1);
+x_agg5_nodal5 = optx(4*n+1:5*n,1);
 %--- ここで総創電力をおいちゃう．
-x_giv{1}=x_agg1_nodal1;
-x_giv{2}=x_agg2_nodal2;
-x_giv{3}=x_agg3_nodal3;
-x_giv{4}=x_agg4_nodal4;
-x_giv{5}=x_agg5_nodal5;
+x_giv{1} = x_agg1_nodal1;
+x_giv{2} = x_agg2_nodal2;
+x_giv{3} = x_agg3_nodal3;
+x_giv{4} = x_agg4_nodal4;
+x_giv{5} = x_agg5_nodal5;
 
 %{
 lam1=y(0*n+1:1*n,1);% Clearing price
@@ -462,6 +462,8 @@ lmp5=(lam-...
 Sum_lmp5 = sum(lmp5)
 MCC5 = -cprice_max5+cprice_min5
 
+%----------%
+
 income = [lam'*x_agg1_nodal1, lam'*x_agg2_nodal2, lam'*x_agg3_nodal3, lam'*x_agg4_nodal4, lam'*x_agg5_nodal5]
 % income*ones(5,1) %sum of all income equal to 0
 LMP = [lmp1, lmp2, lmp3, lmp4, lmp5]
@@ -469,16 +471,16 @@ LMP_total = [Sum_lmp1, Sum_lmp2, Sum_lmp3, Sum_lmp4, Sum_lmp5]
 Profit = [profit1, profit2, profit3, profit4, profit5]
 MCC = [MCC1 MCC2 MCC3 MCC4 MCC5]
 X_giv = [x_giv{1} x_giv{2} x_giv{3} x_giv{4} x_giv{5}]
-COST = [cost1 cost2 cost3 cost4 cost5]
+Cost = [cost1 cost2 cost3 cost4 cost5]
 
 flow = T_max*x;
 flow_matrix = reshape(flow, M, n)';
 
 % % Just for check
 % x1 = X_giv(:,1)
-% load('Kuvariable_aggNo1.mat')
-% x1.*lmp1-Kuvariable
-% sum(x1.*lmp1-Kuvariable)
+% load('cost_vec_aggNo1.mat')
+% x1.*lmp1-cost_vec1
+% sum(x1.*lmp1-cost_vec1)
 % profit1
 
 
@@ -508,8 +510,8 @@ for aggNo=1:5;
     g13_m{aggNo}=zeros(n,1);
     %----------------------------------------------------------------------
     for ii=1:10;%Calculation of PV curtail, C/D power, and SOC for scenario.#ii
-        [optf,optz]=Fprime(x_giv{aggNo},Agg(aggNo).hpv{ii},aggNo);
-        % [optf,optz]=Fprime(x_giv{aggNo},Agg(aggNo).hpv{2},aggNo);
+        [optf,optz]=Fprime(x_giv{aggNo},Agg(aggNo).hpv{ii},ii,aggNo);
+        % [optf,optz]=Fprime(x_giv{aggNo},Agg(aggNo).hpv{2},2,aggNo);
         q{aggNo}{ii}=optz(1:n);%PV curtail profile for scenario#ii
         delta_in{aggNo}{ii}=optz(n+1:2*n);%Charge power profile for scenario#ii
         delta_out{aggNo}{ii}=optz(2*n+1:3*n);%Discharge power profile for scenario#ii
@@ -568,11 +570,25 @@ for aggNo=1:5;
 end
 
 %**************************************************************************
-F(x_agg1_nodal1,1);
-F(x_agg2_nodal2,2);
-F(x_agg3_nodal3,3);
-F(x_agg4_nodal4,4);
-F(x_agg5_nodal5,5);
+% F(x_agg1_nodal1,1);
+% F(x_agg2_nodal2,2);
+% F(x_agg3_nodal3,3);
+% F(x_agg4_nodal4,4);
+% F(x_agg5_nodal5,5);
+
+for i=1:5
+    for j=1:10
+        load(fullfile('/Users/byeonghwalee/Documents/MATLAB/LMP/cost_vectors', ['cost_vec_aggNo' num2str(i) '_PVscenario' num2str(j) '.mat']))
+    end
+end
+
+for i=1:5
+    for j=1:10
+        eval(['cost_vector' num2str(i) ' = cost_vec_temp;'])
+        % eval(['cost_vec' num2str(i) '_PVscenario' num2str(j) ' = cost_vec_temp;']);
+    end
+end
+
 %**************************************************************************
 
 save(sprintf('DATA/data_output_PVlevel%d_Batterylevel%d_LMP_agg1&2_0.mat',PVlevel, batterylevel ...

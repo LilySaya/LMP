@@ -15,12 +15,12 @@ global Agg
 %*** Plot Fig.1(a1),(a2),(a3) *********************************************
 %**************************************************************************
 %--- Read data_output -----------------------------------------------------
-batterylevel=100;%[%] battery penetration level
+batterylevel=0;%[%] battery penetration level
     batterylevel_1=0;
     batterylevel_2=0;
-    batterylevel_3=100;
-    batterylevel_4=100;
-    batterylevel_5=100;
+    batterylevel_3=0;
+    batterylevel_4=0;
+    batterylevel_5=0;
 PVlevel=3;%  1:=PV_Low
 %--- Decision coefficient of PV level -------------------------------------
 if PVlevel==1;
@@ -65,7 +65,7 @@ load(sprintf('DATA/data_output_PVlevel%d_Batterylevel%d_LMP_agg1&2_0.mat',PVleve
     'cost1','cost2','cost3','cost4','cost5',...
     'lmp1','lmp2','lmp3','lmp4','lmp5',...
     'profit1','profit2','profit3','profit4','profit5',...
-    'cost_vec1', 'cost_vec2', 'cost_vec3', 'cost_vec4', 'cost_vec5',...
+    'cost_vector1', 'cost_vector2', 'cost_vector3', 'cost_vector4', 'cost_vector5',...
     'q','delta_in','delta_out','delta','yaa',...%ƒZƒ‹
     'g01','g02','g03','g04','g05','g06','g07','g08','g09','g10','g11','g12','g13',...%ƒZƒ‹
     'q_m','delta_m',...%ƒZƒ‹

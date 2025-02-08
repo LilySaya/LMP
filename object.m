@@ -1,4 +1,4 @@
-function f=object(z,aggNo)
+function f=object(z,aggNo,pv_scenario_index)
 global Agg
 
 n=length(z)/16; % Calculation of size for prosumption profile
@@ -74,34 +74,67 @@ Sa=min([sl(1)*(sa+x0)-sl(2)*x0,sl(2)*sa,sl(3)*sa,sl(4)*(sa-x0)+sl(3)*x0]);
 % Sa means d(s) in paper.
 f=Ma-Sa; %f means cost.
 
-
 for i = 1:5
-    if aggNo == i
-        generator_cost = cost_f01 * g01 + ...
-                         cost_f02 * g02 + ...
-                         cost_f03 * g03 + ...
-                         cost_f04 * g04 + ...
-                         cost_f05 * g05 + ...
-                         cost_f06 * g06 + ...
-                         cost_f07 * g07 + ...
-                         cost_f08 * g08 + ...
-                         cost_f09 * g09 + ...
-                         cost_f10 * g10 + ...
-                         cost_f11 * g11 + ...
-                         cost_f12 * g12 + ...
-                         cost_f13 * g13;
-                     
-        sa_temp = (delta_in - delta_out); % s_\alpha^{\rm fin}
-        sl_temp = Agg(aggNo).a;
-        x0_temp = Agg(aggNo).y_max / 4;
-        
-        Sa_temp = min([ sl_temp(1) * (sa_temp + x0_temp) - sl_temp(2) * x0_temp, sl_temp(2) * sa_temp, sl_temp(3) * sa_temp, sl_temp(4) * (sa_temp - x0_temp) + sl_temp(3) * x0_temp ], [], 2);
-        
-        cost_vec_temp  = generator_cost - Sa_temp;
-        eval(['cost_vec' num2str(i) ' = cost_vec_temp;']);
-        save(['cost_vec_aggNo' num2str(i) '.mat'], ['cost_vec' num2str(i)]);
+    for j = 1:10
+        if(aggNo == i & pv_scenario_index == j)
+            generator_cost = cost_f01 * g01 + ...
+                             cost_f02 * g02 + ...
+                             cost_f03 * g03 + ...
+                             cost_f04 * g04 + ...
+                             cost_f05 * g05 + ...
+                             cost_f06 * g06 + ...
+                             cost_f07 * g07 + ...
+                             cost_f08 * g08 + ...
+                             cost_f09 * g09 + ...
+                             cost_f10 * g10 + ...
+                             cost_f11 * g11 + ...
+                             cost_f12 * g12 + ...
+                             cost_f13 * g13;
+
+            sa_temp = (delta_in - delta_out); % s_\alpha^{\rm fin}
+            sl_temp = Agg(aggNo).a;
+            x0_temp = Agg(aggNo).y_max / 4;
+            
+            Sa_temp = min([ sl_temp(1) * (sa_temp + x0_temp) - sl_temp(2) * x0_temp, sl_temp(2) * sa_temp, sl_temp(3) * sa_temp, sl_temp(4) * (sa_temp - x0_temp) + sl_temp(3) * x0_temp ], [], 2);
+            
+            cost_vec_temp  = generator_cost - Sa_temp;
+            eval(['cost_vec' num2str(i) '_PVscenario' num2str(j) ' = cost_vec_temp;']);
+            folderPath = 'cost_vectors';
+            save(fullfile(folderPath, ['cost_vec_aggNo' num2str(i) '_PVscenario' num2str(j) '.mat']), ['cost_vec' num2str(i) '_PVscenario' num2str(j)]);
+            % save(['cost_vec_aggNo' num2str(i) '_PVscenario' num2str(j) '.mat'], ['cost_vec' num2str(i) '_PVscenario' num2str(j)]);
+        end
     end
 end
+
+
+
+% for i = 1:5
+%     if(aggNo == i)
+%         generator_cost = cost_f01 * g01 + ...
+%                          cost_f02 * g02 + ...
+%                          cost_f03 * g03 + ...
+%                          cost_f04 * g04 + ...
+%                          cost_f05 * g05 + ...
+%                          cost_f06 * g06 + ...
+%                          cost_f07 * g07 + ...
+%                          cost_f08 * g08 + ...
+%                          cost_f09 * g09 + ...
+%                          cost_f10 * g10 + ...
+%                          cost_f11 * g11 + ...
+%                          cost_f12 * g12 + ...
+%                          cost_f13 * g13;
+% 
+%         sa_temp = (delta_in - delta_out); % s_\alpha^{\rm fin}
+%         sl_temp = Agg(aggNo).a;
+%         x0_temp = Agg(aggNo).y_max / 4;
+% 
+%         Sa_temp = min([ sl_temp(1) * (sa_temp + x0_temp) - sl_temp(2) * x0_temp, sl_temp(2) * sa_temp, sl_temp(3) * sa_temp, sl_temp(4) * (sa_temp - x0_temp) + sl_temp(3) * x0_temp ], [], 2);
+% 
+%         cost_vec_temp  = generator_cost - Sa_temp;
+%         eval(['cost_vec' num2str(i) ' = cost_vec_temp;']);
+%         save(['cost_vec_aggNo' num2str(i) '.mat'], ['cost_vec' num2str(i)]);
+%     end
+% end
 
 
 % if(aggNo==1)
@@ -123,8 +156,8 @@ end
 % %sl=[11 8 4 1];%[MJPY/GWh]
 % x0=Agg(aggNo).y_max/4;
 % Sa=min([ sl(1)*(sa+x0)-sl(2)*x0,sl(2)*sa,sl(3)*sa,sl(4)*(sa-x0)+sl(3)*x0 ],[],2);
-% Kuvariable1=generator_cost1-Sa;
-% save('Kuvariable_aggNo1.mat','Kuvariable1');
+% cost_vec1=generator_cost1-Sa;
+% save('cost_vec_aggNo1.mat','cost_vec1');
 % end
 % 
 % if(aggNo==2)
@@ -146,8 +179,8 @@ end
 % %sl=[11 8 4 1];%[MJPY/GWh]
 % x0=Agg(aggNo).y_max/4;
 % Sa=min([ sl(1)*(sa+x0)-sl(2)*x0,sl(2)*sa,sl(3)*sa,sl(4)*(sa-x0)+sl(3)*x0 ],[],2);
-% Kuvariable2=generator_cost2-Sa;
-% save('Kuvariable_aggNo2.mat','Kuvariable2');
+% cost_vec2=generator_cost2-Sa;
+% save('cost_vec_aggNo2.mat','cost_vec2');
 % end
 % 
 % if(aggNo==3)
@@ -169,8 +202,8 @@ end
 % %sl=[11 8 4 1];%[MJPY/GWh]
 % x0=Agg(aggNo).y_max/4;
 % Sa=min([ sl(1)*(sa+x0)-sl(2)*x0,sl(2)*sa,sl(3)*sa,sl(4)*(sa-x0)+sl(3)*x0 ],[],2);
-% Kuvariable3=generator_cost3-Sa;
-% save('Kuvariable_aggNo3.mat','Kuvariable3');
+% cost_vec3=generator_cost3-Sa;
+% save('cost_vec_aggNo3.mat','cost_vec3');
 % end
 % 
 % if(aggNo==4)
@@ -192,8 +225,8 @@ end
 % %sl=[11 8 4 1];%[MJPY/GWh]
 % x0=Agg(aggNo).y_max/4;
 % Sa=min([ sl(1)*(sa+x0)-sl(2)*x0,sl(2)*sa,sl(3)*sa,sl(4)*(sa-x0)+sl(3)*x0 ],[],2);
-% Kuvariable4=generator_cost4-Sa;
-% save('Kuvariable_aggNo4.mat','Kuvariable4');
+% cost_vec4=generator_cost4-Sa;
+% save('cost_vec_aggNo4.mat','cost_vec4');
 % end
 % 
 % if(aggNo==5)
@@ -215,6 +248,6 @@ end
 % %sl=[11 8 4 1];%[MJPY/GWh]
 % x0=Agg(aggNo).y_max/4;
 % Sa=min([ sl(1)*(sa+x0)-sl(2)*x0,sl(2)*sa,sl(3)*sa,sl(4)*(sa-x0)+sl(3)*x0 ],[],2);
-% Kuvariable5=generator_cost5-Sa;
-% save('Kuvariable_aggNo5.mat','Kuvariable5');
+% cost_vec5=generator_cost5-Sa;
+% save('cost_vec_aggNo5.mat','cost_vec5');
 % end

@@ -1,4 +1,4 @@
-function [optf,optz]=Fprime(xa,pv,aggNo)
+function [optf,optz]=Fprime(xa,pv,pv_scenario_index,aggNo)
 global Agg
 n=length(xa);% Calculation of size for prosumption profile
 %Decition variable z=[q;delta_in;delta_out;g01;g02;g03;g04;g05;g06;g07;g08;g09;g10;g11;g12;g13]
@@ -172,7 +172,7 @@ Beq=[-la-xa+pv;%Supply-demand balance constraint
 cvx_begin
 variable z(n*16,1)% Decition variable, namely, prosumption profiles for an Agg.
 % ---------------------------------------
-minimize(object(z,aggNo))
+minimize(object(z,aggNo,pv_scenario_index))
 % ---------------------------------------
 subject to
 Ain*z <= Bin;
@@ -183,6 +183,6 @@ cvx_end
 % -------------------------------------------
 %**************************************************************************
 optz=z;
-optf=object(optz,aggNo);%optf means cost
-save('z.mat','z');
+optf=object(optz,aggNo,pv_scenario_index);%optf means cost
+% save('z.mat','z');
 
