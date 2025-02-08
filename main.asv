@@ -142,7 +142,7 @@ Aeq = kron(eye(n),ones(1,N));
 Beq = zeros(n,1);
 %--- 
 
-%--- ëóìdóeó [GW]
+%--- ÈÄÅÈõªÂÆπÈáè[GW]
 inp=[11.2;6.1;14.3;8.7;8;6.7];
 yo=inp.^(-1);
 B1=yo(1)/mean(yo)*6.7/8;
@@ -161,7 +161,7 @@ T_max = kron(base_matrix,T);
 T_min = kron(base_matrix,-T);
 Ain = [T_max;T_min];
 
-% tmp2 = [B;-B];Å@
+% tmp2 = [B;-B];„ÄÄ
 Fmax = reshape(repmat(B',1,n),[],1);
 Fmin = reshape(repmat(-B',1,n),[],1);
 % Bin = [Fmax;Fmax];
@@ -266,7 +266,7 @@ x_agg2_nodal2 = optx(1*n+1:2*n,1);
 x_agg3_nodal3=optx(2*n+1:3*n,1);
 x_agg4_nodal4=optx(3*n+1:4*n,1);
 x_agg5_nodal5=optx(4*n+1:5*n,1);
-%--- Ç±Ç±Ç≈ëçënìdóÕÇÇ®Ç¢ÇøÇ·Ç§ÅD
+%--- „Åì„Åì„ÅßÁ∑èÂâµÈõªÂäõ„Çí„Åä„ÅÑ„Å°„ÇÉ„ÅÜÔºé
 x_giv{1}=x_agg1_nodal1;
 x_giv{2}=x_agg2_nodal2;
 x_giv{3}=x_agg3_nodal3;
@@ -358,7 +358,7 @@ cprice_min5 = reshaped_cprice_min(5, :)'; % Fifth row (bus 5 values)
 
 
 
-%--- ÉmÅ[É_ÉãÇ≤Ç∆ÇÃënìdó ÅiÇ±Ç±Ç™0Ç…Ç»Ç¡ÇƒÇÈÇÕÇ∏Åj
+%--- „Éé„Éº„ÉÄ„É´„Åî„Å®„ÅÆÂâµÈõªÈáèÔºà„Åì„Åì„Åå0„Å´„Å™„Å£„Å¶„Çã„ÅØ„ÅöÔºâ
 % figure
 % plot(x_agg1_nodal1+x_agg2_nodal1);
 
@@ -462,8 +462,6 @@ lmp5=(lam-...
 Sum_lmp5 = sum(lmp5)
 MCC5 = -cprice_max5+cprice_min5
 
-%----------%
-
 income = [lam'*x_agg1_nodal1, lam'*x_agg2_nodal2, lam'*x_agg3_nodal3, lam'*x_agg4_nodal4, lam'*x_agg5_nodal5]
 % income*ones(5,1) %sum of all income equal to 0
 LMP = [lmp1, lmp2, lmp3, lmp4, lmp5]
@@ -471,16 +469,16 @@ LMP_total = [Sum_lmp1, Sum_lmp2, Sum_lmp3, Sum_lmp4, Sum_lmp5]
 Profit = [profit1, profit2, profit3, profit4, profit5]
 MCC = [MCC1 MCC2 MCC3 MCC4 MCC5]
 X_giv = [x_giv{1} x_giv{2} x_giv{3} x_giv{4} x_giv{5}]
-Cost = [cost1 cost2 cost3 cost4 cost5]
+COST = [cost1 cost2 cost3 cost4 cost5]
 
 flow = T_max*x;
 flow_matrix = reshape(flow, M, n)';
 
 % % Just for check
 % x1 = X_giv(:,1)
-% load('cost_vec_aggNo1.mat')
-% x1.*lmp1-cost_vec1
-% sum(x1.*lmp1-cost_vec1)
+% load('Kuvariable_aggNo1.mat')
+% x1.*lmp1-Kuvariable
+% sum(x1.*lmp1-Kuvariable)
 % profit1
 
 
@@ -570,22 +568,17 @@ for aggNo=1:5;
 end
 
 %**************************************************************************
-% F(x_agg1_nodal1,1);
-% F(x_agg2_nodal2,2);
-% F(x_agg3_nodal3,3);
-% F(x_agg4_nodal4,4);
-% F(x_agg5_nodal5,5);
-load('cost_vec_aggNo1.mat')
-load('cost_vec_aggNo2.mat')
-load('cost_vec_aggNo3.mat')
-load('cost_vec_aggNo4.mat')
-load('cost_vec_aggNo5.mat')
+F(x_agg1_nodal1,1);
+F(x_agg2_nodal2,2);
+F(x_agg3_nodal3,3);
+F(x_agg4_nodal4,4);
+F(x_agg5_nodal5,5);
 %**************************************************************************
 
 save(sprintf('DATA/data_output_PVlevel%d_Batterylevel%d_LMP_agg1&2_0.mat',PVlevel, batterylevel ...
     ),...
     'x_agg1_nodal1','x_agg2_nodal2','x_agg3_nodal3','x_agg4_nodal4','x_agg5_nodal5',...
-    'x_giv',... %ÉZÉã
+    'x_giv',... %„Çª„É´
     'lam',...
     'u_hat',...
     'reshaped_cprice_max',...
@@ -596,11 +589,10 @@ save(sprintf('DATA/data_output_PVlevel%d_Batterylevel%d_LMP_agg1&2_0.mat',PVleve
     'cost1','cost2','cost3','cost4','cost5',...
     'lmp1','lmp2','lmp3','lmp4','lmp5',...
     'profit1','profit2','profit3','profit4','profit5',...
-    'cost_vec1', 'cost_vec2', 'cost_vec3', 'cost_vec4', 'cost_vec5',...
-    'q','delta_in','delta_out','delta','yaa',...%ÉZÉã
-    'g01','g02','g03','g04','g05','g06','g07','g08','g09','g10','g11','g12','g13',...%ÉZÉã
-    'q_m','delta_m',...%ÉZÉã
-    'g01_m','g02_m','g03_m','g04_m','g05_m','g06_m','g07_m','g08_m','g09_m','g10_m','g11_m','g12_m','g13_m',...%ÉZÉã
+    'q','delta_in','delta_out','delta','yaa',...%„Çª„É´
+    'g01','g02','g03','g04','g05','g06','g07','g08','g09','g10','g11','g12','g13',...%„Çª„É´
+    'q_m','delta_m',...%„Çª„É´
+    'g01_m','g02_m','g03_m','g04_m','g05_m','g06_m','g07_m','g08_m','g09_m','g10_m','g11_m','g12_m','g13_m',...%„Çª„É´
     'socialcost_i','B1','B2','B3','B4','B5','B6','B7');
 toc
 

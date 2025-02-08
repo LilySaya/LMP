@@ -12,7 +12,9 @@ global Agg
       Fprime(xa,Agg(aggNo).hpv{8},aggNo)+...
       Fprime(xa,Agg(aggNo).hpv{9},aggNo)+...
       Fprime(xa,Agg(aggNo).hpv{10},aggNo)])/10;
-%       
+
+
+% [f]=([Fprime(xa,Agg(aggNo).hpv{2},aggNo)])
       
 
 

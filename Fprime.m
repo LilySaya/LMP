@@ -184,3 +184,5 @@ cvx_end
 %**************************************************************************
 optz=z;
 optf=object(optz,aggNo);%optf means cost
+save('z.mat','z');
+

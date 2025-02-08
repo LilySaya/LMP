@@ -9,12 +9,18 @@ set(0,'defaultAxesFontSize',12);
 set(0,'defaultAxesFontName','century');
 set(0,'defaultTextFontSize',12);
 set(0,'defaultTextFontName','century');
+global Agg
 
 %**************************************************************************
 %*** Plot Fig.1(a1),(a2),(a3) *********************************************
 %**************************************************************************
 %--- Read data_output -----------------------------------------------------
-batterylevel=50;%[%] battery penetration level
+batterylevel=100;%[%] battery penetration level
+    batterylevel_1=0;
+    batterylevel_2=0;
+    batterylevel_3=100;
+    batterylevel_4=100;
+    batterylevel_5=100;
 PVlevel=3;%  1:=PV_Low
 %--- Decision coefficient of PV level -------------------------------------
 if PVlevel==1;
@@ -45,7 +51,8 @@ end
     % 'socialcost_i','B1','B2','B3','B4','B5','B6','B7');
 
 % load(sprintf('data_output_PVlevel%d_Batterylevel%d_LMP.mat',PVlevel,batterylevel),...
-load(sprintf('DATA/data_output_PVlevel3_Batterylevel50_LMP_agg1&2_0'),...
+load(sprintf('DATA/data_output_PVlevel%d_Batterylevel%d_LMP_agg1&2_0.mat',PVlevel, batterylevel ...
+    ),...
    'x_agg1_nodal1','x_agg2_nodal2','x_agg3_nodal3','x_agg4_nodal4','x_agg5_nodal5',...
     'x_giv',... %セル
     'lam',...
@@ -58,6 +65,7 @@ load(sprintf('DATA/data_output_PVlevel3_Batterylevel50_LMP_agg1&2_0'),...
     'cost1','cost2','cost3','cost4','cost5',...
     'lmp1','lmp2','lmp3','lmp4','lmp5',...
     'profit1','profit2','profit3','profit4','profit5',...
+    'cost_vec1', 'cost_vec2', 'cost_vec3', 'cost_vec4', 'cost_vec5',...
     'q','delta_in','delta_out','delta','yaa',...%セル
     'g01','g02','g03','g04','g05','g06','g07','g08','g09','g10','g11','g12','g13',...%セル
     'q_m','delta_m',...%セル
@@ -75,7 +83,7 @@ load(sprintf('DATA/data_output_PVlevel3_Batterylevel50_LMP_agg1&2_0'),...
 % bar(1:24,lam7,'k--','Linewidth',2,'FaceAlpha',.4)
 %stairs(0.5:24.5,[lam1;lam1(24)],'r-','Linewidth',5);
 
-figure
+figure(1)
 lambda=[lam];
 bar(lambda);
 % title(sprintf('System-wide Price($\\lambda$), PVlevel:%d Batterylevel:%d',PVlevel,batterylevel), 'Interpreter', 'latex')
@@ -87,7 +95,7 @@ grid on
 %axis([0 25 0 12])
 ylim([-5 6])
 
-figure
+figure(2)
 u_hat_matrix = reshape(u_hat, 6, 24)
 bar3(u_hat_matrix');
 title(sprintf('$\\hat{u}$ (Upper Limit), PVlevel:%d Batterylevel:%d', PVlevel, batterylevel), 'Interpreter', 'latex');
@@ -95,11 +103,12 @@ title(sprintf('$\\hat{u}$ (Upper Limit), PVlevel:%d Batterylevel:%d', PVlevel, b
 %bar(1:n,lam,'b','Linewidth',2);%
 ylabel('Time [h]','Fontname','Times','FontSize',15);
 zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
-xlabel('Bus','Fontname','Times','FontSize',15)
+% xlabel('Bus','Fontname','Times','FontSize',15)
+xlabel('Agg','Fontname','Times','FontSize',15)
 %axis([0 25 0 12])
 zlim([0 12])
 
-figure
+figure(3)
 u_check_matrix = reshape(u_check, 6, 24)
 bar3(u_check_matrix');
 title(sprintf('$\\check{u}$ (Lower Limit), PVlevel:%d Batterylevel:%d', PVlevel, batterylevel), 'Interpreter', 'latex');
@@ -107,19 +116,21 @@ title(sprintf('$\\check{u}$ (Lower Limit), PVlevel:%d Batterylevel:%d', PVlevel,
 %bar(1:n,lam,'b','Linewidth',2);%
 ylabel('Time [h]','Fontname','Times','FontSize',15);
 zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
-xlabel('Bus','Fontname','Times','FontSize',15)
+% xlabel('Bus','Fontname','Times','FontSize',15)
+xlabel('Agg','Fontname','Times','FontSize',15)
 %axis([0 25 0 12])
 zlim([0 12])
 
-figure
+figure(4)
 LMP=[lmp1,lmp2,lmp3,lmp4,lmp5]
 bar3(LMP);
-title(sprintf('LMP, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel), 'Interpreter', 'latex')
+title(sprintf('LMP, PVlevel:%d Batterylevel: Agg1-2 %d\\%%, Agg3-5 %d\\%%',PVlevel,batterylevel_1, batterylevel), 'Interpreter', 'latex')
 %legend('nodal1','nodal2','nodal3','nodal4','nodal5','nodal6','nodal7')
 %bar(1:n,lam,'b','Linewidth',2);%
 ylabel('Time [h]','Fontname','Times','FontSize',15);
 zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
-xlabel('Bus','Fontname','Times','FontSize',15)
+% xlabel('Bus','Fontname','Times','FontSize',15)
+xlabel('Agg','Fontname','Times','FontSize',15)
 xlabelHandle = get(gca, 'XLabel'); % Get handle for x-axis label
 xlabelHandle.Rotation = 35;       % Set rotation to 30 degrees
 ylabelHandle = get(gca, 'YLabel'); % Get handle for x-axis label
@@ -127,7 +138,26 @@ ylabelHandle.Rotation = -15;       % Set rotation to 30 degrees
 zlim([-15 15])
 view(-50, 27); % Azimuth=45 degrees, Elevation=30 degrees
 %axis([0 25 0 12])
+legend('Agg1', 'Agg2', 'Agg3', 'Agg4', 'Agg5','Location','northeast')
 
+% updated for NEDO_20250211
+% 2-dim plot of above figure
+figure(5)
+title(sprintf('LMP, PVlevel:%d Batterylevel: Agg1-2 %d\\%%, Agg3-5 %d\\%%',PVlevel,batterylevel_1, batterylevel), 'Interpreter', 'latex')
+grid on;
+hold on;
+plot([1:24],lmp1,'Marker','*','Color','k','LineStyle','-.','LineWidth',1.5)
+plot([1:24],lmp2,'Marker','*','Color','k','LineStyle','-.','LineWidth',1.5)
+plot([1:24],lmp3,'Marker','o','Color','r','LineStyle','-','LineWidth',1.5)
+plot([1:24],lmp4,'Marker','o','Color','r','LineStyle','-','LineWidth',1.5)
+plot([1:24],lmp5,'Marker','o','Color','r','LineStyle','-','LineWidth',1.5)
+% ylabel('Time [h]','Fontname','Times','FontSize',15);
+% zlabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
+% xlabel('Bus','Fontname','Times','FontSize',15)
+xlabel('Time [h]','Fontname','Times','FontSize',15);
+ylabel('Price [JPY/kWh]','Fontname','Times','FontSize',15);
+ylim([-15 15])
+legend('Agg1', 'Agg2', 'Agg3', 'Agg4', 'Agg5','Location','northwest')
 
 figure(100)
 plot(x_agg1_nodal1,'Linewidth',3,'Color',[0.87,0.49,0]);hold on;
@@ -138,7 +168,7 @@ plot(x_agg5_nodal5,'Linewidth',3,'Color',[0,0.5,0]);
 legend('Agg1','Agg2','Agg3','Agg4','Agg5')
 ylabel('[GW]')
 title(sprintf('total prosumption, PVlevel:%d Batterylevel:%d',PVlevel,batterylevel))
-figure
+figure(6)
 plot(x_agg1_nodal1,'b-','Linewidth',2);hold on
 % plot(x_agg1_nodal2,'r-','Linewidth',2)
 plot([1:24],B1*ones(1,24),'b--')
@@ -149,7 +179,7 @@ title(sprintf('Each prosumption for agg1, PVlevel:%d Batterylevel:%d',PVlevel,ba
 ylabel('[GW]')
 legend('nodal1','nodal2')
 
-figure
+figure(7)
 % plot(x_agg2_nodal1,'b-','Linewidth',2);hold on
 plot(x_agg2_nodal2,'r-','Linewidth',2);hold on
 % plot(x_agg2_nodal3,'g-','Linewidth',2)
@@ -164,7 +194,7 @@ ylabel('[GW]')
 % legend('nodal1','nodal2','nodal3')
 legend('nodal2')
 
-figure
+figure(8)
 plot(x_agg3_nodal3,'g-','Linewidth',2);hold on
 % plot(x_agg3_nodal4,'m-','Linewidth',2)
 % plot(x_agg3_nodal5,'c-','Linewidth',2)
@@ -185,7 +215,7 @@ ylabel('[GW]')
 % legend('nodal3','nodal4','nodal5','nodal6','nodal7')
 legend('nodal3')
 
-figure
+figure(9)
 plot(x_agg4_nodal4,'m-','Linewidth',2);hold on;
 % plot(x_agg4_nodal5,'c-','Linewidth',2)
 plot([1:24],B4*ones(1,24),'m--')
@@ -197,7 +227,7 @@ ylabel('[GW]')
 % legend('nodal4','nodal5')
 legend('nodal4')
 
-figure
+figure(10)
 plot(x_agg5_nodal5,'k-','Linewidth',2);hold on;
 % plot(x_agg5_nodal6,'k-','Linewidth',2);hold on;
 % plot(x_agg5_nodal7,'k--','Linewidth',2')
@@ -1139,4 +1169,3 @@ ylabel('Profit[M JPY]','Fontname','Times','FontSize',15)
 
 
 
-3

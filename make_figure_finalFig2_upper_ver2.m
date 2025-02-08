@@ -15,12 +15,12 @@ global Agg
 %*** Plot Fig.1(a1),(a2),(a3) *********************************************
 %**************************************************************************
 %--- Read data_output -----------------------------------------------------
-batterylevel=50;%[%] battery penetration level
-batterylevel_1= 0;
-batterylevel_2= 0;
-batterylevel_3= 50;
-batterylevel_4= 50; 
-batterylevel_5= 50;
+batterylevel = 0;%[%] battery penetration level
+    batterylevel_1= 0;
+    batterylevel_2= 0;
+    batterylevel_3= 0;
+    batterylevel_4= 0; 
+    batterylevel_5= 0;
 PVlevel=3;%  1:=PV_Low
 %--- Decision coefficient of PV level -------------------------------------
 if PVlevel==1;
@@ -55,7 +55,8 @@ set_parameter(5,batterylevel_5, PV_HorL);
 %     'g01_m','g02_m','g03_m','g04_m','g05_m','g06_m','g07_m','g08_m','g09_m','g10_m','g11_m','g12_m','g13_m',...%セル
 %     'socialcost_i','B1','B2','B3','B4','B5','B6','B7');
 
-load(sprintf('DATA/data_output_PVlevel3_Batterylevel50_LMP_agg1&2_0'),...
+load(sprintf('DATA/data_output_PVlevel%d_Batterylevel%d_LMP_agg1&2_0.mat',PVlevel, batterylevel ...
+    ),...
     'x_agg1_nodal1','x_agg2_nodal2',...
     'x_agg3_nodal3','x_agg4_nodal4','x_agg5_nodal5',...
     'x_giv',... %セル
@@ -68,6 +69,7 @@ load(sprintf('DATA/data_output_PVlevel3_Batterylevel50_LMP_agg1&2_0'),...
     'cprice_min1','cprice_min2','cprice_min3','cprice_min4','cprice_min5',...
     'cost1','cost2','cost3','cost4','cost5',...
     'profit1','profit2','profit3','profit4','profit5',...
+    'Kuvariable1', 'Kuvariable2', 'Kuvariable3', 'Kuvariable4', 'Kuvariable5',...
     'q','delta_in','delta_out','delta','yaa',...%セル
     'g01','g02','g03','g04','g05','g06','g07','g08','g09','g10','g11','g12','g13',...%セル
     'q_m','delta_m',...%セル
@@ -299,8 +301,8 @@ plot(1:n,maixLPQ,'b-','Linewidth',3);
 %--- Coloring PV curtail --------------------------------------------------
 if sum(abs(q_mT))>=1e-2;
 V=[maixLPQ' fliplr(maixLP')];
-%fill(T,V,[0 0 0],'FaceAlpha',.4)
-fill(T,V,[0 0 0])
+fill(T,V,[0 0 0],'FaceAlpha',.4)
+% fill(T,V,[0 0 0])
 end
 %--------------------------------------------------------------------------
 plot(1:n,maix3,'k-','Linewidth',4);
