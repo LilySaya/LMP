@@ -21,15 +21,15 @@ tic
 %**************************************************************************
 % for PVlevel=1:2;
 % for rate=10:5:100;
-for batterylevel=[0:5:100];
+%for batterylevel=[0:5:100];
 % batterylevel = 50;
 
 
-%batterylevel_1= 25;
-%batterylevel_2= 25;
-%batterylevel_3= 25;
-%batterylevel_4= 25;
-%batterylevel_5= 25;
+batterylevel_1= 25;
+batterylevel_2= 25;
+batterylevel_3= 25;
+batterylevel_4= 25;
+batterylevel_5= 25;
 
 %--- Important parameter
 %--- You need to decide battry penetration level & to select PV level. ----
@@ -655,7 +655,7 @@ save(sprintf('DATA_BtLv0to100/data_output_PVlevel%d_Batterylevel%d_LMP_agg3.mat'
     'socialcost_i','B1','B2','B3','B4','B5','B6','B7');
 toc
 
-end
+%end
 
 xxxxxxxxxxx
     % 'lam1','lam2','lam3','lam4','lam5','lam6','lam7',...
