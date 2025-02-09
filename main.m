@@ -21,12 +21,12 @@ tic
 %**************************************************************************
 % for PVlevel=1:2;
 % for rate=10:5:100;
-% for batterylevel=[0:5:100];
-batterylevel = 0;
+for batterylevel=[0:5:100];
+% batterylevel = 50;
 
 batterylevel_1= 0;
 batterylevel_2= 0;
-batterylevel_3= 0;
+batterylevel_3= batterylevel;
 batterylevel_4= 0;
 batterylevel_5= 0;
 
@@ -623,11 +623,11 @@ Fprime(x_agg4_nodal4,Agg(4).hpv{worst_p_4},99,4);
 Fprime(x_agg5_nodal5,Agg(5).hpv{worst_p_5},99,5);
 
 for i=1:5
-    load(fullfile('/Users/byeonghwalee/Documents/MATLAB/LMP/cost_vectors', ['cost_vec_aggNo' num2str(i) '_PVscenario99.mat']))
+    load(fullfile('cost_vectors', ['cost_vec_aggNo' num2str(i) '_PVscenario99.mat']))
 end
 %**************************************************************************
-
-save(sprintf('DATA/data_output_PVlevel%d_Batterylevel%d_LMP_agg1&2_0.mat',PVlevel, batterylevel ...
+% DATA_BtLv0to100/data_output_PVlevel%d_Batterylevel%d_LMP_agg1&2_0.mat
+save(sprintf('DATA_BtLv0to100/data_output_PVlevel%d_Batterylevel%d_LMP_agg3.mat',PVlevel, batterylevel ...
     ),...
     'x_agg1_nodal1','x_agg2_nodal2','x_agg3_nodal3','x_agg4_nodal4','x_agg5_nodal5',...
     'x_giv',... %ƒZƒ‹
@@ -648,6 +648,8 @@ save(sprintf('DATA/data_output_PVlevel%d_Batterylevel%d_LMP_agg1&2_0.mat',PVleve
     'g01_m','g02_m','g03_m','g04_m','g05_m','g06_m','g07_m','g08_m','g09_m','g10_m','g11_m','g12_m','g13_m',...%ƒZƒ‹
     'socialcost_i','B1','B2','B3','B4','B5','B6','B7');
 toc
+
+end
 
 xxxxxxxxxxx
     % 'lam1','lam2','lam3','lam4','lam5','lam6','lam7',...
