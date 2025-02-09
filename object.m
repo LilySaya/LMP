@@ -69,7 +69,7 @@ Ma =cost_f01*ones(n,1)'*g01+...
 sa=ones(n,1)'*(delta_in-delta_out);% s_\alpha^{\rm fin}
 sl=Agg(aggNo).a;
 %sl=[11 8 4 1];%[MJPY/GWh]
-x0=Agg(aggNo).y_max/4;
+x0=Agg(aggNo).y_max/(4);
 Sa=min([sl(1)*(sa+x0)-sl(2)*x0,sl(2)*sa,sl(3)*sa,sl(4)*(sa-x0)+sl(3)*x0]);
 % Sa means d(s) in paper.
 f=Ma-Sa; %f means cost.
@@ -94,10 +94,14 @@ if (pv_scenario_index == 99)
     
     sa_temp = (delta_in - delta_out); % s_\alpha^{\rm fin}
     sl_temp = Agg(aggNo).a;
-    x0_temp = Agg(aggNo).y_max / 4;
-    
-    Sa_temp = min([ sl_temp(1) * (sa_temp + x0_temp) - sl_temp(2) * x0_temp, sl_temp(2) * sa_temp, sl_temp(3) * sa_temp, sl_temp(4) * (sa_temp - x0_temp) + sl_temp(3) * x0_temp ], [], 2);
-    
+    x0_temp = Agg(aggNo).y_max / (4);
+    Sa = [ sl_temp(1) * (sa_temp + x0_temp) - sl_temp(2) * x0_temp, sl_temp(2) * sa_temp, sl_temp(3) * sa_temp, sl_temp(4) * (sa_temp - x0_temp) + sl_temp(3) * x0_temp ];
+    Sa_sum = sum([ sl_temp(1) * (sa_temp + x0_temp) - sl_temp(2) * x0_temp, sl_temp(2) * sa_temp, sl_temp(3) * sa_temp, sl_temp(4) * (sa_temp - x0_temp) + sl_temp(3) * x0_temp ]);
+    [~,min_index] = min(Sa_sum);
+    Sa_temp = Sa(:,min_index);
+    %sum_temp = sum(temp);
+    %[~,min_index]=min(sum_temp);
+    %Sa_temp = temp(:,min_index);
     cost_vec_temp  = generator_cost - Sa_temp;
     eval(['cost_vec' num2str(i) '_PVscenario' num2str(j) ' = cost_vec_temp;']);
     folderPath = 'cost_vectors';

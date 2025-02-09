@@ -24,11 +24,12 @@ tic
 for batterylevel=[0:5:100];
 % batterylevel = 50;
 
-batterylevel_1= 0;
-batterylevel_2= 0;
-batterylevel_3= batterylevel;
-batterylevel_4= 0;
-batterylevel_5= 0;
+
+%batterylevel_1= 25;
+%batterylevel_2= 25;
+%batterylevel_3= 25;
+%batterylevel_4= 25;
+%batterylevel_5= 25;
 
 %--- Important parameter
 %--- You need to decide battry penetration level & to select PV level. ----
@@ -616,11 +617,16 @@ worst_p_4 = find(F_values_4 == cost4);
 worst_p_5 = find(F_values_5 == cost5);
 
 % 99 denotes the "MAX"
-Fprime(x_agg1_nodal1,Agg(1).hpv{worst_p_1},99,1);
-Fprime(x_agg2_nodal2,Agg(2).hpv{worst_p_2},99,2);
-Fprime(x_agg3_nodal3,Agg(3).hpv{worst_p_3},99,3);
-Fprime(x_agg4_nodal4,Agg(4).hpv{worst_p_4},99,4);
-Fprime(x_agg5_nodal5,Agg(5).hpv{worst_p_5},99,5);
+[~,optz1]=Fprime(x_agg1_nodal1,Agg(1).hpv{worst_p_1},1,1);
+object(optz1,1,99);
+[~,optz2]=Fprime(x_agg2_nodal2,Agg(2).hpv{worst_p_2},2,2);
+object(optz2,2,99);
+[~,optz3]=Fprime(x_agg3_nodal3,Agg(3).hpv{worst_p_3},3,3);
+object(optz3,3,99);
+[~,optz4]=Fprime(x_agg4_nodal4,Agg(4).hpv{worst_p_4},4,4);
+object(optz4,4,99);
+[~,optz5]=Fprime(x_agg5_nodal5,Agg(5).hpv{worst_p_5},5,5);
+object(optz5,5,99);
 
 for i=1:5
     load(fullfile('cost_vectors', ['cost_vec_aggNo' num2str(i) '_PVscenario99.mat']))
