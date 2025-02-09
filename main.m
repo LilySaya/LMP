@@ -217,11 +217,16 @@ minimize(F(  w(0*n+1:1*n,1)+w(1*n+1:2*n,1)  ,1)+...
 %w: [all timeslot values of x1] times 5 buses
 x_matrix = reshape(x, N, n)';
 w = reshape(x_matrix, [], 1);
+
+
 minimize(F(w(0*n+1:1*n,1),1) +...
          F(w(1*n+1:2*n,1),2) +...
          F(w(2*n+1:3*n,1),3) +...
          F(w(3*n+1:4*n,1),4) +...
          F(w(4*n+1:5*n,1),5) )
+
+
+%minimize(F_max(1)+F_max(2)+F_max(3)+F_max(4)+F_max(5))
 % ---------------------------------------
 subject to
 %y:[Aeq1;Aeq2;Aeq3;Aeq4;Aeq5;Aeq6;Aeq7]*w == [Beq1;Beq2;Beq3;Beq4;Beq5;Beq6;Beq7];
@@ -570,6 +575,7 @@ for aggNo=1:5;
 end
 
 %**************************************************************************
+%{
 for i=1:5
     for j=1:10
         load(fullfile('/Users/byeonghwalee/Documents/MATLAB/LMP/cost_vectors', ['cost_vec_aggNo' num2str(i) '_PVscenario' num2str(j) '.mat']))
@@ -595,6 +601,26 @@ clear cost_vec2*;
 clear cost_vec3*;
 clear cost_vec4*;
 clear cost_vec5*;
+%}
+for p = 1:10
+    F_values_1(p) = Fprime(x_agg1_nodal1,Agg(1).hpv{p},p,1);
+    F_values_2(p) = Fprime(x_agg2_nodal2,Agg(2).hpv{p},p,2);
+    F_values_3(p) = Fprime(x_agg3_nodal3,Agg(3).hpv{p},p,3);
+    F_values_4(p) = Fprime(x_agg4_nodal4,Agg(4).hpv{p},p,4);
+    F_values_5(p) = Fprime(x_agg5_nodal5,Agg(5).hpv{p},p,5);
+end
+worst_p_1 = find(F_values_1 == cost1); 
+worst_p_2 = find(F_values_2 == cost2);
+worst_p_3 = find(F_values_3 == cost3);
+worst_p_4 = find(F_values_4 == cost4);
+worst_p_5 = find(F_values_5 == cost5);
+
+% 99 denotes the "MAX"
+Fprime(x_agg1_nodal1,Agg(1).hpv{worst_p_1},99,1);
+Fprime(x_agg2_nodal2,Agg(2).hpv{worst_p_2},99,2);
+Fprime(x_agg3_nodal3,Agg(3).hpv{worst_p_3},99,3);
+Fprime(x_agg4_nodal4,Agg(4).hpv{worst_p_4},99,4);
+Fprime(x_agg5_nodal5,Agg(5).hpv{worst_p_5},99,5);
 %**************************************************************************
 
 save(sprintf('DATA/data_output_PVlevel%d_Batterylevel%d_LMP_agg1&2_0.mat',PVlevel, batterylevel ...
