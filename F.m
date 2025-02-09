@@ -16,9 +16,9 @@ global Agg
       Fprime(xa,Agg(aggNo).hpv{10},10,aggNo)])/10;
 %}
 
-[f]=([Fprime(xa,Agg(aggNo).hpv{2},2,aggNo)]);
+%[f]=([Fprime(xa,Agg(aggNo).hpv{2},2,aggNo)]);
 
-%{
+
 [f]=max([Fprime(xa,Agg(aggNo).hpv{1},1,aggNo),...
       Fprime(xa,Agg(aggNo).hpv{2},2,aggNo),...
       Fprime(xa,Agg(aggNo).hpv{3},3,aggNo),...
@@ -29,7 +29,7 @@ global Agg
       Fprime(xa,Agg(aggNo).hpv{8},8,aggNo),...
       Fprime(xa,Agg(aggNo).hpv{9},9,aggNo),...
       Fprime(xa,Agg(aggNo).hpv{10},10,aggNo)]);
-%}
+
 
 
 
