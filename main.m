@@ -21,7 +21,7 @@ tic
 %**************************************************************************
 % for PVlevel=1:2;
 % for rate=10:5:100;
-%for batterylevel=[0:5:100];
+% for batterylevel=[0:5:100];
 batterylevel = 0;
 
 batterylevel_1= 0;
@@ -621,6 +621,10 @@ Fprime(x_agg2_nodal2,Agg(2).hpv{worst_p_2},99,2);
 Fprime(x_agg3_nodal3,Agg(3).hpv{worst_p_3},99,3);
 Fprime(x_agg4_nodal4,Agg(4).hpv{worst_p_4},99,4);
 Fprime(x_agg5_nodal5,Agg(5).hpv{worst_p_5},99,5);
+
+for i=1:5
+    load(fullfile('/Users/byeonghwalee/Documents/MATLAB/LMP/cost_vectors', ['cost_vec_aggNo' num2str(i) '_PVscenario99.mat']))
+end
 %**************************************************************************
 
 save(sprintf('DATA/data_output_PVlevel%d_Batterylevel%d_LMP_agg1&2_0.mat',PVlevel, batterylevel ...
@@ -637,7 +641,7 @@ save(sprintf('DATA/data_output_PVlevel%d_Batterylevel%d_LMP_agg1&2_0.mat',PVleve
     'cost1','cost2','cost3','cost4','cost5',...
     'lmp1','lmp2','lmp3','lmp4','lmp5',...
     'profit1','profit2','profit3','profit4','profit5',...
-    'cost_vector1', 'cost_vector2', 'cost_vector3', 'cost_vector4', 'cost_vector5',...
+    'cost_vec1_PVscenario99', 'cost_vec2_PVscenario99', 'cost_vec3_PVscenario99', 'cost_vec4_PVscenario99', 'cost_vec5_PVscenario99',...
     'q','delta_in','delta_out','delta','yaa',...%ƒZƒ‹
     'g01','g02','g03','g04','g05','g06','g07','g08','g09','g10','g11','g12','g13',...%ƒZƒ‹
     'q_m','delta_m',...%ƒZƒ‹
